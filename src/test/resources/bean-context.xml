@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<bean id="userDao" class="spr.board.dao.UserDao"></bean>
+	<bean id="postDao" class="spr.board.dao.PostDao"></bean>
+	
+	<bean id="daoRepo" class="spr.board.dao.DaoRepository" scope="singleton" >
+		<constructor-arg ref="userDao" index="0"></constructor-arg>
+		<constructor-arg ref="postDao" index="1"></constructor-arg>
+	</bean>
+</beans>
