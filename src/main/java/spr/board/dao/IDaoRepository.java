@@ -1,5 +1,8 @@
 package spr.board.dao;
 
+import spr.board.mybatis.IPostDao;
+import spr.board.mybatis.IUserDao;
+
 public interface IDaoRepository {
 
 	public IUserDao getUserDao();

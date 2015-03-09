@@ -10,7 +10,7 @@ import spr.board.model.PostVO;
 
 @Service
 public class PostService {
-	@Autowired
+	// @Autowired
 	private IDaoRepository repo;
 	
 	public List<PostVO> findAllPosts() {

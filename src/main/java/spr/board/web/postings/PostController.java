@@ -11,17 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import spr.board.model.PostVO;
+import spr.board.mybatis.IPostDao;
 
 @Controller
 public class PostController {
 	private Logger logger = LoggerFactory.getLogger(PostController.class);
+	
 	@Autowired
-	private PostService service;
+	private IPostDao postDao;
 	
 	@RequestMapping(value="/postings", method=RequestMethod.GET)
 	public String listAll(Model model) {
 		logger.debug("ฟไรป url : " + "/postings");
-		List<PostVO> posts = service.findAllPosts();
+		List<PostVO> posts = postDao.findAll();
 		
 		model.addAttribute("allPosts", posts);
 		

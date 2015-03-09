@@ -1,5 +1,8 @@
 package spr.board.dao;
 
+import spr.board.mybatis.IPostDao;
+import spr.board.mybatis.IUserDao;
+
 public class DaoRepository implements IDaoRepository {
 
 	private IUserDao userDao;

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	
+	<typeAliases>
+		<typeAlias type="spr.board.model.UserVO" alias="UserVO" />
+		<typeAlias type="spr.board.model.PostVO" alias="PostVO" />
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="spr/board/mybatis/UserVO.xml" />
+		<mapper resource="spr/board/mybatis/PostVO.xml" />
+	</mappers>
+
+</configuration>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spr.board.mybatis.IPostDao">
+		<resultMap type="PostVO" id="fullPostingMap">
+		<constructor>
+		<!-- Integer seq, 
+			String title, 
+			String content, 
+			Integer viewCount,
+			String whenCreated -->
+			<idArg javaType="integer" column="seq"/>
+			<arg javaType="string" column="title"/>
+			<arg javaType="string" column="content"/>
+			<arg javaType="integer" column="views"/>
+			<arg javaType="string" column="when_created"/>
+		</constructor>
+		<association property="writer" column="fk_writer" select="UserVO.userBySeq"/>
+	</resultMap>
+	
+	<select id="findAll" resultMap="fullPostingMap">
+		SELECT 
+			seq, 
+			title, 
+			content, 
+			views, 
+			when_created, 
+		    fk_writer  
+		FROM postings
+	</select>
+
+</mapper>
