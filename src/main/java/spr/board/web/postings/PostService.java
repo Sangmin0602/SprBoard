@@ -17,4 +17,10 @@ public class PostService {
 		List<PostVO> allPosts = repo.getPostDao().findAll();
 		return allPosts;
 	}
+
+	public PostVO findBySeq(String postSeq) {
+		int seq = Integer.parseInt(postSeq);
+		PostVO post = repo.getPostDao().findBySeq(seq, true);
+		return post;
+	}
 }

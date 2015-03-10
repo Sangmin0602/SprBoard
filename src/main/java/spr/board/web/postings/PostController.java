@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +26,14 @@ public class PostController {
 		
 		model.addAttribute("allPosts", posts);
 		
-		return "postings" ;
+		return "list-postings" ;
+	}
+	
+	@RequestMapping(value="/postings/{pid:[0-9]+}", method=RequestMethod.GET)
+	public String getPostBySeq(Model model, @PathVariable String pid) {
+		logger.debug("요청: " + "/postings" + "/" + pid);
+		PostVO post = service.findBySeq ( pid );
+		model.addAttribute("post", post);
+		return "view-post";
 	}
 }
