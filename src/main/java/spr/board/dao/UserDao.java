@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +16,8 @@ import spr.board.model.UserVO;
 
 @Repository
 public class UserDao implements IUserDao {
+	private Logger logger = LoggerFactory.getLogger(UserDao.class);
+	
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory ;
 	@Override
@@ -113,6 +117,7 @@ public class UserDao implements IUserDao {
 			params.put("id", id);
 			params.put("pass", pw);
 			user = session.selectOne("User.login", params);
+			logger.debug("user : " + user);
 			return user;
 		} finally {
 			session.close();

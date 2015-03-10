@@ -29,15 +29,4 @@ public class UserController {
 		model.addAttribute("users", users);
 		return "list-all-users";
 	}
-
-	/*
-	@Override
-	public ModelAndView handleRequest(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView("list-all-users");		
-		List<UserVO> users = repository.getUserDao().findAll();
-		request.setAttribute("users", users);
-		return mav;
-	}
-	*/
 }
