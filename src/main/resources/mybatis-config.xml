@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="dbconn.properties"></properties>
+	<typeAliases>
+		<typeAlias type="spr.board.model.UserVO" alias="User"/>
+		<typeAlias type="spr.board.model.PostVO" alias="Posting"/>
+	</typeAliases>
+	<environments default="dev">
+		<environment id="dev">
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="${dev.driver}" />
+				<property name="url" value="${dev.demoboard.url}" />
+				<property name="username" value="${dev.demoboard.user}" />
+				<property name="password" value="${dev.demoboard.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="mybatis/UserVO.xml" />
+		<mapper resource="mybatis/PostingVO.xml"/>
+	</mappers>
+</configuration>
