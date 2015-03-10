@@ -38,4 +38,7 @@
 	<context:component-scan base-package="spr.board.dao" annotation-config="true"/>
 	<mybatis:scan base-package="mybatis"/>
 	
+	<bean id="loginUrl" class="spr.board.utils.LoginUrlAssembler">
+		<property name="loginUrlTemplate" value="{$ctxpath}/login?target={$nextUrl}"></property>
+	</bean>
 </beans>
