@@ -20,7 +20,7 @@ public class PostController {
 	
 	@RequestMapping(value="/postings", method=RequestMethod.GET)
 	public String listAll(Model model) {
-		logger.debug("¿äÃ» url : " + "/postings");
+		logger.debug("ìš”ì²­: " + "/postings");
 		List<PostVO> posts = service.findAllPosts();
 		
 		model.addAttribute("allPosts", posts);
