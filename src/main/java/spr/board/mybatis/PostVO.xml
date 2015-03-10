@@ -16,7 +16,7 @@
 			<arg javaType="integer" column="views"/>
 			<arg javaType="string" column="when_created"/>
 		</constructor>
-		<association property="writer" column="fk_writer" select="UserVO.userBySeq"/>
+		<association property="writer" column="fk_writer" select="spr.board.mybatis.IUserDao.userBySeq"/>
 	</resultMap>
 	
 	<select id="findAll" resultMap="fullPostingMap">

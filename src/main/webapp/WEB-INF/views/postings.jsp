@@ -9,9 +9,7 @@
 </head>
 <body>
 <c:forEach var="p" items="${allPosts }">
-${p.seq}
-${p.title}
-${p.content}
+<li>[${p.seq}] ${p.title} - ${p.content} - [${p.writer.nickName }]
 </c:forEach>
 </body>
 </html>
