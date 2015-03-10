@@ -21,10 +21,33 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!--
+		@Autowired annotation을 사용하지 않은 경우 직접 의존성을 주입해주어야 한다.
+	-->
+	<beans:bean id="userController"
+		class="spr.board.web.users.UserController">
+		<beans:property name="daoRepository" ref="daoRepo"/>
+	</beans:bean>
+
+	<!-- <beans:bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>  --> 
 	
+	<!--
+		@Controller annotation을 쓰지 않으면 각 controller bean이 어떤 url에 mapping되는지
+		아래와 같이 직접 지정해주어야 한다.
+		
+		postController는 @Controller annotation 방식으로 등록이 되고 있는데 위쪽에 있는
+
+		   <annotation-driven />
+		   
+		이 bean 등록을 자동으로 해주는 역할을 한다.
+	-->
+	<beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<beans:property name="mappings">
+			<beans:value>
+			/users=userController
+			</beans:value>
+		</beans:property>
+	</beans:bean>
 	
-	<context:component-scan base-package="spr.board.web" />
-	
-	
-	
+	 <context:component-scan base-package="spr.board.web" />
 </beans:beans>
