@@ -25,6 +25,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- Spring이 Controller를 호출하기전에 실행 로그인 Session 체크시 사용 -->
 	<interceptors>
 		<interceptor>
 			<mvc:mapping path="/postings/write"/>
@@ -32,11 +33,13 @@
 		</interceptor>
 	</interceptors>
 	
+	<!-- 
 	<beans:bean id="userController"
 		class="spr.board.web.users.UserController">
 		<beans:property name="daoRepository" ref="daoRepo"/>
 	</beans:bean>
-
+ 	-->
+ 	
 	<!-- <beans:bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>  --> 
 	
 	 <context:component-scan base-package="spr.board.web" />

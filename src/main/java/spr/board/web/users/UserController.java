@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,18 +16,27 @@ import spr.board.model.UserVO;
 @Controller
 public class UserController {
 	private Logger logger = LoggerFactory.getLogger(UserController.class);
-	private IDaoRepository repository;
+	//private IDaoRepository repository;
+	@Autowired
+	private UserService service;
 	
-	public void setDaoRepository(IDaoRepository repo) {
-		this.repository = repo;
-	}
-	
-	@RequestMapping(value="/users", method=RequestMethod.GET)
+	@RequestMapping(value="/users", method=RequestMethod.GET) 
 	public String listAllUsers(Model model) {
-		List<UserVO> users = repository.getUserDao().findAll();
-		logger.debug( "[REQ] for all users : size (" + users.size() + ")" );
-		
+		List<UserVO> users = service.findAllUsers();
 		model.addAttribute("users", users);
 		return "list-all-users";
 	}
+	
+//	public void setDaoRepository(IDaoRepository repo) {
+//		this.repository = repo;
+//	}
+//	
+//	@RequestMapping(value="/users", method=RequestMethod.GET)
+//	public String listAllUsers(Model model) {
+//		List<UserVO> users = repository.getUserDao().findAll();
+//		logger.debug( "[REQ] for all users : size (" + users.size() + ")" );
+//		
+//		model.addAttribute("users", users);
+//		return "list-all-users";
+//	}
 }
