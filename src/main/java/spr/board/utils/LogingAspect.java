@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
+import spr.board.model.UserVO;
+
 @Aspect
 public class LogingAspect {
 	@Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
@@ -47,11 +49,10 @@ public class LogingAspect {
     			response = (HttpServletResponse) o;
     		}
     	}
-        
     	try {
-    		HttpSession session = request.getSession(true);
+    		HttpSession session = request.getSession(false);
     		//session.setAttribute("user", "test");
-			String loginId = (String) session.getAttribute("user");
+			UserVO loginId = (UserVO) session.getAttribute("user");
 			String userEnterType = (String) session.getAttribute("UserEnterType");
 			if (loginId == null || "".equals(loginId)) {
 				System.out.println("loginId=="+loginId);

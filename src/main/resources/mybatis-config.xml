@@ -8,6 +8,7 @@
 	<typeAliases>
 		<typeAlias type="spr.board.model.UserVO" alias="User"/>
 		<typeAlias type="spr.board.model.PostVO" alias="Posting"/>
+		<typeAlias type="spr.board.model.BoardDataBean" alias="BoardBean"/>
 	</typeAliases>
 	<environments default="dev">
 		<environment id="dev">

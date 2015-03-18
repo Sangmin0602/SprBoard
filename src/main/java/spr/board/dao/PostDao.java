@@ -1,15 +1,20 @@
 package spr.board.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import spr.board.model.BoardDataBean;
 import spr.board.model.PostVO;
 
 @Repository
@@ -72,7 +77,7 @@ public class PostDao implements IPostDao {
 	}
 
 	@Override
-	public List<PostVO> findAll() throws DaoException {
+	public List<PostVO> findAll(HttpServletRequest request,HttpServletResponse response) throws DaoException {
 		SqlSession session = sqlSessionFactory.openSession(false);
 		try {
 			return session.selectList("Posting.findAll");
@@ -116,6 +121,120 @@ public class PostDao implements IPostDao {
 	@Override
 	public IPostDao getDao() {
 		return this;
+	}
+
+
+	@Override
+	public int getTotalCount() throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		int count = session.selectOne("Posting.ViewListCount");
+		
+		if ( count < 1) {
+			throw new SQLException("목록이 없습니다");
+		}
+		session.close();
+		return count;
+	}
+
+	@Override
+	public List<BoardDataBean> getArticles(int startRow, int pageSize) {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		Map<String, Integer> params = new HashMap<String, Integer>();
+		params.put("startRow", startRow);
+		params.put("pageSize", pageSize);
+		List<BoardDataBean> list = session.selectList("Posting.ViewList", params);
+		session.close();
+		return list;
+	}
+
+
+	@Override
+	public void getInsertArticle(BoardDataBean article) {
+		//바로 article 객체로 못받는지?
+		//제네릭 할떄 integer, String 같이 있을때?
+		SqlSession session = sqlSessionFactory.openSession();
+		
+		Map params = new HashMap();
+		params.put("num", article.getNum());
+		params.put("writer", article.getWriter());
+		params.put("email", article.getEmail());
+		params.put("subject", article.getSubject());
+		params.put("passwd", article.getPasswd());
+		params.put("reg_date", article.getReg_date());
+		params.put("readcount", article.getReadcount());
+		params.put("ref", article.getRef());
+		params.put("re_step", article.getRe_step());
+		params.put("re_level", article.getRe_level());
+		params.put("content", article.getContent());
+		params.put("ip", article.getIp());
+		
+		session.insert("Posting.WritePro",params);
+		session.close();
+	}
+
+
+	@Override
+	public BoardDataBean getArticle(int num) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession();
+		int updateCount  = session.update("Posting.updateReadCnt",num);
+		if (updateCount != 1) {
+			throw new SQLException("조회수 갱신 실패 : posting[" + num + "] count[" + num + "]");
+		}
+		BoardDataBean board = session.selectOne("Posting.article", num);
+		session.close();
+		return board;
+	}
+
+
+	@Override
+	public BoardDataBean updateGetArticle(int num) {
+		SqlSession session = sqlSessionFactory.openSession(true);
+		BoardDataBean board = session.selectOne("Posting.article", num);
+		session.close();
+		return board;
+	}
+
+
+	@Override
+	public void updateArticle(BoardDataBean article) throws SQLException {
+		SqlSession  session = sqlSessionFactory.openSession(true);
+		
+		List<BoardDataBean> board = session.selectList("Posting.getPasswd", article.getNum());
+		for (BoardDataBean boardPw : board) {
+			int i = 0;
+			String pw = boardPw.getPasswd();
+			if(pw.equals(article.getPasswd())){
+				int chk = session.update("UpdateContent",article);
+				
+				if(chk != 1) {
+					throw new SQLException("업데이트 실패하였습니다.");
+				}
+			}
+			i++;
+		}
+		session.close();
+	}
+
+	@Override
+	public int deleteArticle(int num, String passwd) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(true);
+		
+		List<BoardDataBean> board = session.selectList("Posting.getPasswd", num);
+		int chk = 0;
+		for (BoardDataBean boardPw : board) {
+			int i = 0;
+			String pw = boardPw.getPasswd();
+			if(pw.equals(passwd)){
+				chk = session.delete("Posting.deleteArticle", num);
+				
+				if(chk != 1) {
+					throw new SQLException("업데이트 실패하였습니다.");
+				}
+			}
+			i++;
+		}
+		session.close();
+		return chk;
 	}
 
 }
