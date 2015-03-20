@@ -51,7 +51,7 @@
 	<context:annotation-config/>
 	
 	<bean id="testLogger" class="spr.board.utils.TestLogger" />
-	<bean id="logingAspect" class="spr.board.utils.LogingAspect" />	
+	<!-- <bean id="logingAspect" class="spr.board.utils.LogingAspect" /> -->	
 	
 	
 	

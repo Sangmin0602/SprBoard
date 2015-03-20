@@ -49,7 +49,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value="/postings/write", method=RequestMethod.GET)
-	public String showWritingPage() {
+	public String showWritingPage(HttpServletRequest request, HttpServletResponse response) {
 		return "writing";
 	}
 

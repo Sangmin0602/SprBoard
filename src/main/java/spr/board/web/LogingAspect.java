@@ -1,4 +1,4 @@
-package spr.board.utils;
+package spr.board.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,27 +8,33 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import spr.board.model.UserVO;
 
 @Aspect
+@Component
 public class LogingAspect {
-	@Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
+	private Logger logger = LoggerFactory.getLogger(LogingAspect.class);
+	
+	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
 	private void adminMethod() {}
 	
-	@Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
+	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
 	private void bbsMethod(){}
 	
-	@Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
+	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
 	private void commonMethod() {}
 	
-    @Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
+    @Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
     private void onmAdministratorMethod(){}
      
-    @Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
+    @Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
     private void onmMembershipMethod(){}
      
-    @Pointcut("execution(* spr.board.dao.IPostDao.*(..))")
+    @Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
     private void onmReportMethod(){}
          
     private String[] access_url = {       };
@@ -37,7 +43,7 @@ public class LogingAspect {
     		+ "|| onmAdministratorMethod() || onmMembershipMethod() || onmReportMethod()")
     public Object trace(ProceedingJoinPoint joinPoint) throws Throwable{
  
-    	System.out.println("#### LoginAspect 시작 ####");     
+    	logger.info("#### LoginAspect 시작 ####");     
     	HttpServletRequest request = null;
     	HttpServletResponse response = null;
 

@@ -20,7 +20,7 @@ public class TestLogger {
 	@Before("execution(* spr.board.dao.IPostDao.*(..))")
 	public void beforelog(JoinPoint point) {
 		logger.debug("====================================================");
-		logger.debug(point.getSignature().getName() + "@Before IPostDao Method");
+		logger.debug("!!!!" + point.getSignature().getName() + "@Before IPostDao Method");
 		logger.debug("====================================================");
 	}
 	@Before("execution(* spr.board.dao.IUserDao.*(..))")

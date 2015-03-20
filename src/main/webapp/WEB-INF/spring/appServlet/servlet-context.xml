@@ -4,16 +4,21 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
+	<aop:aspectj-autoproxy/>
+	<context:component-scan base-package="spr.board.web" annotation-config="true"/>
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
@@ -26,12 +31,14 @@
 	</beans:bean>
 	
 	<!-- Spring이 Controller를 호출하기전에 실행 로그인 Session 체크시 사용 -->
+	<!-- 
 	<interceptors>
 		<interceptor>
 			<mvc:mapping path="/postings/write"/>
 			<beans:bean class="spr.board.web.intercepters.LoginCheckIntercepter"></beans:bean>
 		</interceptor>
 	</interceptors>
+	 -->
 	
 	<!-- 
 	<beans:bean id="userController"
@@ -41,6 +48,5 @@
  	-->
  	
 	<!-- <beans:bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>  --> 
-	
-	 <context:component-scan base-package="spr.board.web" />
+
 </beans:beans>
