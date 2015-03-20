@@ -11,35 +11,30 @@ import org.slf4j.LoggerFactory;
 
 import spr.board.web.postings.PostController;
 
+/**
+ * Repository annotation이 붙은 모든 클래스의 메소드 호출에 advise를 붙임.
+ * @author chminseo
+ *
+ */
 @Aspect
 public class TestLogger {
-	//private Log log = LogFactory.getLog(getClass());
-	//private Log log = LogFactory.getLog(TestLogger.class);
+
 	private Logger logger = LoggerFactory.getLogger(PostController.class);
 	
-	@Before("execution(* spr.board.dao.IPostDao.*(..))")
+//	@Before("within(spr.board.dao.*)")
+//	@Before("target(spr.board.dao.IDao)")
+	@Before("@within(org.springframework.stereotype.Repository)")
 	public void beforelog(JoinPoint point) {
 		logger.debug("====================================================");
-		logger.debug("!!!!" + point.getSignature().getName() + "@Before IPostDao Method");
+		logger.debug("!!!!" + point.getSignature().getName() + "@Before Dao Request");
 		logger.debug("====================================================");
 	}
-	@Before("execution(* spr.board.dao.IUserDao.*(..))")
-	public void beforeboardLog(JoinPoint point) {
-		logger.debug("====================================================");
-		logger.debug(point.getSignature().getName() + "@Before IUserDao Method");
-		logger.debug("====================================================");
-	}
-	
-	@After("execution(* spr.board.dao.IPostDao.*(..))")
+//	@After("within(spr.board.dao.*)")
+//	@After("target(spr.board.dao.IDao)")
+	@After("@within(org.springframework.stereotype.Repository)")
 	public void log(JoinPoint point) {
 		logger.debug("====================================================");
-		logger.debug(point.getSignature().getName() + "@After IPostDao Method");
-		logger.debug("====================================================");
-	}
-	@After("execution(* spr.board.dao.IUserDao.*(..))")
-	public void boardLog(JoinPoint point) {
-		logger.debug("====================================================");
-		logger.debug(point.getSignature().getName() + "@After IUserDao  Method");
+		logger.debug(point.getSignature().getName() + "@After Dao Request");
 		logger.debug("====================================================");
 	}
 }
