@@ -1,15 +1,19 @@
 package spr.board.web.intercepters;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import spr.board.model.UserVO;
@@ -21,6 +25,8 @@ import spr.board.utils.LoginUrlAssembler;
  * @author chminseo
  *
  */
+@Aspect
+@Component
 public class LoginCheckIntercepter extends HandlerInterceptorAdapter {
 	private enum ReqType {NORMAL, JSON};
 	
@@ -29,6 +35,30 @@ public class LoginCheckIntercepter extends HandlerInterceptorAdapter {
 	@Autowired
 	private LoginUrlAssembler urlMaker ;
 	
+	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
+	private void loginCheck() {}
+	
+	@Around(value="loginCheck()")
+	public Object checkLogin(ProceedingJoinPoint joinPoint) throws Throwable{
+		
+		logger.info("[AOP:LOGIN CHECK]");     
+    	HttpServletRequest request = null;
+    	HttpServletResponse response = null;
+
+    	for(Object o : joinPoint.getArgs()){
+    		if(o instanceof HttpServletRequest) {
+    			request = (HttpServletRequest)o;
+    		}
+    		if(o instanceof HttpServletResponse) {
+    			response = (HttpServletResponse) o;
+    		}
+    	}
+    	if ( preHandle(request, response, null) ) {
+    		Object result = joinPoint.proceed();
+    		return result;    		
+    	}
+    	return null;
+	}
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
