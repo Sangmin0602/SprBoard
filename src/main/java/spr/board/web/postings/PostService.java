@@ -20,8 +20,8 @@ public class PostService {
 	@Autowired
 	private IDaoRepository repo;
 	
-	public List<PostVO> findAllPosts(HttpServletRequest request, HttpServletResponse response) {
-		List<PostVO> allPosts = repo.getPostDao().findAll(request,response);
+	public List<PostVO> findAllPosts() {
+		List<PostVO> allPosts = repo.getPostDao().findAll();
 		return allPosts;
 	}
 

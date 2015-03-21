@@ -18,7 +18,7 @@ public class LogingAspect {
 	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
 	private void adminMethod() {}
 	
-	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
+	@Pointcut("execution(* spr.board.web.postings.PostController.listAll(..))")
 	private void bbsMethod(){}
 	
 	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")

@@ -1,13 +1,9 @@
 package spr.board.dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -77,7 +73,7 @@ public class PostDao implements IPostDao {
 	}
 
 	@Override
-	public List<PostVO> findAll(HttpServletRequest request,HttpServletResponse response) throws DaoException {
+	public List<PostVO> findAll() throws DaoException {
 		SqlSession session = sqlSessionFactory.openSession(false);
 		try {
 			return session.selectList("Posting.findAll");

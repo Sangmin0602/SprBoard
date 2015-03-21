@@ -38,7 +38,10 @@ public class LoginCheckIntercepter extends HandlerInterceptorAdapter {
 	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
 	private void loginCheck() {}
 	
-	@Around(value="loginCheck()")
+	@Pointcut("execution(* spr.board.web.postings.PostController.listAll(..))")
+	private void loginListPostings() {}
+	
+	@Around(value="loginCheck() || loginListPostings()")
 	public Object checkLogin(ProceedingJoinPoint joinPoint) throws Throwable{
 		
 		logger.info("[AOP:LOGIN CHECK]");     

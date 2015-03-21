@@ -11,7 +11,7 @@ import spr.board.model.PostVO;
 
 public interface IPostDao extends IDao<IPostDao> {
 	
-	public List<PostVO> findAll(HttpServletRequest request, HttpServletResponse response) throws DaoException;
+	public List<PostVO> findAll() throws DaoException;
 
 	public PostVO findBySeq ( int seq, boolean updateViewCount) throws DaoException;
 	

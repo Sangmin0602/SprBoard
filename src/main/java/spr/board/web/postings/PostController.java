@@ -31,9 +31,9 @@ public class PostController {
 	private PostService service;
 
 	@RequestMapping(value="/postings", method=RequestMethod.GET)
-	public String listAll(HttpServletRequest request, HttpServletResponse response,Model model) {
+	public String listAll(HttpServletRequest request, HttpServletResponse response, Model model) {
 		logger.debug("요청: " + "/postings");
-		List<PostVO> posts = service.findAllPosts(request,response);
+		List<PostVO> posts = service.findAllPosts();
 
 		model.addAttribute("allPosts", posts);
 
