@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import spr.board.model.BoardDataBean;
 import spr.board.model.PostVO;
@@ -67,36 +69,36 @@ public class PostController {
 
 	@RequestMapping(value="/postings/{pid:[0-9]+}", method=RequestMethod.DELETE)
 	public String deletePost(Model model) {
-		
+
 		return "";
 	}
 	@RequestMapping(value="/postings/write.json", method=RequestMethod.POST)
 	public String insertPost(@RequestParam String title, @RequestParam String content,
 			HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("[NEW POST]" + title + ":" + content);
-		
+
 		HttpSession session = request.getSession(false);
 		UserVO user = (UserVO) session.getAttribute("user");
 		PostVO post = service.insertPost(title, content, user.getSeq());
-		
+
 		String nextUrl = "/postings/" + post.getSeq();
 
 		JSONObject json = new JSONObject();
 		json.put("success", Boolean.TRUE);
 		json.put("nextUrl", nextUrl);
-		
-//		try {
-//			PrintWriter pw = response.getWriter();
-//			logger.info("JSON : " + json.toJSONString());
-//			pw.write(json.toJSONString());
-//			
-//			pw.flush();
-//			return null;
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+
+		//		try {
+		//			PrintWriter pw = response.getWriter();
+		//			logger.info("JSON : " + json.toJSONString());
+		//			pw.write(json.toJSONString());
+		//			
+		//			pw.flush();
+		//			return null;
+		//		} catch (IOException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+
 		request.setAttribute("json", json.toJSONString());
 		return "json/json-writer";
 	}
@@ -181,112 +183,121 @@ public class PostController {
 
 		response.sendRedirect("list");
 	}
-	
+
 	@RequestMapping(value="/postings/content", method=RequestMethod.GET)
 	public String content(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="num", required=true) int num, 
 			@RequestParam(value="num", required=true) String pageNum) throws Throwable {
 		//http://localhost:8080/postings/content?num=4&pageNum=1 이렇게 보낼때 어떻게 받아야할지../
 		//int num = Integer.parseInt(request.getParameter("num"));//해당 글 번호
-        //String pageNum = request.getParameter("pageNum");//해당 페이지 번호
+		//String pageNum = request.getParameter("pageNum");//해당 페이지 번호
 
-        BoardDataBean article =  service.getArticle(num);//해당 글 번호에 대한 해당 레코드
-  
-        //해당 뷰에서 사용할 속성
-        request.setAttribute("num", new Integer(num));
-        request.setAttribute("pageNum", new Integer(pageNum));
-        request.setAttribute("article", article);
-        
-        return "content";//해당 뷰
+		BoardDataBean article =  service.getArticle(num);//해당 글 번호에 대한 해당 레코드
+
+		//해당 뷰에서 사용할 속성
+		request.setAttribute("num", new Integer(num));
+		request.setAttribute("pageNum", new Integer(pageNum));
+		request.setAttribute("article", article);
+
+		return "content";//해당 뷰
 	}
-	
+
 	@RequestMapping(value="/postings/updateForm", method=RequestMethod.GET)
 	public String update(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="num", required=true) int num, 
 			@RequestParam(value="pageNum", required=true) String pageNum) throws Throwable {
-        BoardDataBean article =  service.updateGetArticle(num); //해당 글번호에 대한 레코드를 가져온다.
+		BoardDataBean article =  service.updateGetArticle(num); //해당 글번호에 대한 레코드를 가져온다.
 
 		//해당 뷰에서 사용할 속성
-        request.setAttribute("pageNum", new Integer(pageNum));
-        request.setAttribute("article", article);
+		request.setAttribute("pageNum", new Integer(pageNum));
+		request.setAttribute("article", article);
 
-        return "updateForm";//해당 뷰
+		return "updateForm";//해당 뷰
 	}
-	
+
 	@RequestMapping(value="/postings/updatePro", method=RequestMethod.POST)
 	public void updatePro(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="num", required=true) int num, 
 			@RequestParam(value="pageNum", required=true) String pageNum) throws Throwable {
-        
+
 		request.setCharacterEncoding("euc-kr");
 
 		BoardDataBean article = new BoardDataBean();
-        article.setNum(Integer.parseInt(request.getParameter("num")));
-        article.setWriter(request.getParameter("writer"));
-        article.setEmail(request.getParameter("email"));
-        article.setSubject(request.getParameter("subject"));
-        article.setContent(request.getParameter("content"));
-        article.setPasswd(request.getParameter("passwd"));
-	    
-        service.updateArticle(article);
+		article.setNum(Integer.parseInt(request.getParameter("num")));
+		article.setWriter(request.getParameter("writer"));
+		article.setEmail(request.getParameter("email"));
+		article.setSubject(request.getParameter("subject"));
+		article.setContent(request.getParameter("content"));
+		article.setPasswd(request.getParameter("passwd"));
 
-        request.setAttribute("pageNum", new Integer(pageNum));
-        
-        response.sendRedirect("list");
+		service.updateArticle(article);
+
+		request.setAttribute("pageNum", new Integer(pageNum));
+
+		response.sendRedirect("list");
 	}
 	@RequestMapping(value="/postings/deleteForm", method=RequestMethod.GET)
 	public String deleteFrom(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="num", required=true) int num, 
 			@RequestParam(value="pageNum", required=true) String pageNum) throws Throwable {
-		
+
 		request.setAttribute("num", new Integer(num));
 		request.setAttribute("pageNum", new Integer(pageNum));
-	
+
 		return "deleteForm";
 	}
-	
+
 	@RequestMapping(value="/postings/deletePro", method=RequestMethod.POST)
 	public void deletePro(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="pageNum", required=true) String pageNum) throws Throwable {
 		request.setAttribute("pageNum", new Integer(pageNum));
-		
+
 		request.setCharacterEncoding("euc-kr");
-		
+
 		int num = Integer.parseInt(request.getParameter("num"));
 		String passwd = request.getParameter("passwd");
-		
+
 		int check = service.deleteArticle(num, passwd);
-		
+
 		//해당 뷰에서 사용할 속성
 		request.setAttribute("pageNum", new Integer(pageNum));
 		request.setAttribute("check", new Integer(check));
-		
+
 		response.sendRedirect("list");
 	}
-	
+
 	@RequestMapping(value = "/home/fileUpload", method = RequestMethod.POST)
-	 public String fileUpload( @RequestParam("file1") MultipartFile multipartFile, Model model ) throws IOException {
-	 
-	  if ( multipartFile == null) return "home";
-	  
-	  String fileExt = multipartFile.getOriginalFilename().substring( multipartFile.getOriginalFilename().lastIndexOf( ".") + 1, multipartFile.getOriginalFilename().length());
-	  
-	  // 넘어온 파일을 임시의 폴더에 둔다.
-	  // 임시 폴더는 C:\ 로 잡기로 한다.
-	  File uploadFile =  File.createTempFile( "c:\\", "." + fileExt);
-	  multipartFile.transferTo( uploadFile);
-	  
-	  File thumbnail =  File.createTempFile( "c:\\", "." + fileExt);
-	  
-	  
-	  // 이미지 파일만 썸네일 을 만든다.
-	  if ( ImageUtils.isImageFile ( fileExt))
-	  {
-	   ThumbnailUtil.makeThumbnail( uploadFile, thumbnail, 100, 100);
-	   String imageBase64 = ImageUtils.encodeToString( thumbnail, fileExt);
-	   model.addAttribute("imageBase64", "data:image/png;base64," + imageBase64);
-	  }
-	  
-	  model.addAttribute("targetFileInfo", multipartFile.getOriginalFilename());
-	  model.addAttribute("uploadFilePath", uploadFile.getAbsolutePath());
-	  
-	  
-	  return "home";
-	  
-	 }
- }
+	public String fileUpload( @RequestParam("file1") MultipartFile multipartFile, Model model ) throws IOException {
+
+		if ( multipartFile == null) return "home";
+
+		String fileExt = multipartFile.getOriginalFilename().substring( multipartFile.getOriginalFilename().lastIndexOf( ".") + 1, multipartFile.getOriginalFilename().length());
+
+		// 넘어온 파일을 임시의 폴더에 둔다.
+		// 임시 폴더는 C:\ 로 잡기로 한다.
+		File uploadFile =  File.createTempFile( "c:\\", "." + fileExt);
+		multipartFile.transferTo( uploadFile);
+
+		File thumbnail =  File.createTempFile( "c:\\", "." + fileExt);
+
+
+		// 이미지 파일만 썸네일 을 만든다.
+		if ( ImageUtils.isImageFile ( fileExt))
+		{
+			ThumbnailUtil.makeThumbnail( uploadFile, thumbnail, 100, 100);
+			String imageBase64 = ImageUtils.encodeToString( thumbnail, fileExt);
+			model.addAttribute("imageBase64", "data:image/png;base64," + imageBase64);
+		}
+
+		model.addAttribute("targetFileInfo", multipartFile.getOriginalFilename());
+		model.addAttribute("uploadFilePath", uploadFile.getAbsolutePath());
+
+
+		return "home";
+
+	}
+
+	@RequestMapping(value = "postings/download", method = RequestMethod.GET)
+	public ModelAndView down(HttpServletRequest request,@RequestParam(value="filepath", required=true) String filepath){
+		//File file = new File("C:/Users/PT/","11.txt");
+		File file = new File(filepath);
+
+		request.setAttribute("fileName", "이름_재지정.txt");   //다운 받을 시 이름을 결정합니다. 빼게되면 기존에 저장된 이름으로 받습니다.  
+		return new ModelAndView("fileDownloadView","fileDownload", file);
+	}
+}
