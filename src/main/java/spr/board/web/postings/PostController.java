@@ -1,5 +1,8 @@
 package spr.board.web.postings;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +10,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+
+
+
+
+
 
 
 import org.json.simple.JSONObject;
@@ -19,10 +28,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import spr.board.model.BoardDataBean;
 import spr.board.model.PostVO;
 import spr.board.model.UserVO;
+import spr.board.utils.ImageUtils;
+import spr.board.utils.ThumbnailUtil;
 
 @Controller
 public class PostController {
@@ -53,9 +65,14 @@ public class PostController {
 		return "writing";
 	}
 
+	@RequestMapping(value="/postings/{pid:[0-9]+}", method=RequestMethod.DELETE)
+	public String deletePost(Model model) {
+		
+		return "";
+	}
 	@RequestMapping(value="/postings/write.json", method=RequestMethod.POST)
 	public String insertPost(@RequestParam String title, @RequestParam String content,
-			HttpServletRequest request) {
+			HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("[NEW POST]" + title + ":" + content);
 		
 		HttpSession session = request.getSession(false);
@@ -67,8 +84,20 @@ public class PostController {
 		JSONObject json = new JSONObject();
 		json.put("success", Boolean.TRUE);
 		json.put("nextUrl", nextUrl);
+		
+//		try {
+//			PrintWriter pw = response.getWriter();
+//			logger.info("JSON : " + json.toJSONString());
+//			pw.write(json.toJSONString());
+//			
+//			pw.flush();
+//			return null;
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 		request.setAttribute("json", json.toJSONString());
-
 		return "json/json-writer";
 	}
 
@@ -229,4 +258,35 @@ public class PostController {
 		
 		response.sendRedirect("list");
 	}
+	
+	@RequestMapping(value = "/home/fileUpload", method = RequestMethod.POST)
+	 public String fileUpload( @RequestParam("file1") MultipartFile multipartFile, Model model ) throws IOException {
+	 
+	  if ( multipartFile == null) return "home";
+	  
+	  String fileExt = multipartFile.getOriginalFilename().substring( multipartFile.getOriginalFilename().lastIndexOf( ".") + 1, multipartFile.getOriginalFilename().length());
+	  
+	  // 넘어온 파일을 임시의 폴더에 둔다.
+	  // 임시 폴더는 C:\ 로 잡기로 한다.
+	  File uploadFile =  File.createTempFile( "c:\\", "." + fileExt);
+	  multipartFile.transferTo( uploadFile);
+	  
+	  File thumbnail =  File.createTempFile( "c:\\", "." + fileExt);
+	  
+	  
+	  // 이미지 파일만 썸네일 을 만든다.
+	  if ( ImageUtils.isImageFile ( fileExt))
+	  {
+	   ThumbnailUtil.makeThumbnail( uploadFile, thumbnail, 100, 100);
+	   String imageBase64 = ImageUtils.encodeToString( thumbnail, fileExt);
+	   model.addAttribute("imageBase64", "data:image/png;base64," + imageBase64);
+	  }
+	  
+	  model.addAttribute("targetFileInfo", multipartFile.getOriginalFilename());
+	  model.addAttribute("uploadFilePath", uploadFile.getAbsolutePath());
+	  
+	  
+	  return "home";
+	  
+	 }
  }

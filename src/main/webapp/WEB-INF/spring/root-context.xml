@@ -1,58 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-		xmlns:aop="http://www.springframework.org/schema/aop" 
-	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
 			http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	
-	<!-- 
-	<bean id="userDao" class="spr.board.dao.UserDao"></bean>
-	<bean id="postDao" class="spr.board.dao.PostDao"></bean>
-	<bean id="daoRepo" class="spr.board.dao.DaoRepository">
-		<constructor-arg ref="userDao" index="0"></constructor-arg>
-		<constructor-arg ref="postDao" index="1"></constructor-arg>
-	</bean>
-	 -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+	<!-- <bean id="userDao" class="spr.board.dao.UserDao"></bean> <bean id="postDao" 
+		class="spr.board.dao.PostDao"></bean> <bean id="daoRepo" class="spr.board.dao.DaoRepository"> 
+		<constructor-arg ref="userDao" index="0"></constructor-arg> <constructor-arg 
+		ref="postDao" index="1"></constructor-arg> </bean> -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<value>classpath:dbconn.properties</value>
 		</property>
 	</bean>
-	
+
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${dev.driver}"></property>
-		<property name="url" value="${dev.demoboard.url}"/>
+		<property name="url" value="${dev.demoboard.url}" />
 		<property name="username" value="${dev.demoboard.user}" />
 		<property name="password" value="${dev.demoboard.password}" />
 	</bean>
-	
+
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
 	</bean>
-	
-	<context:component-scan base-package="spr.board.dao" annotation-config="true"/>
-	
-	<mybatis:scan base-package="mybatis"/>
-	
+
+	<context:component-scan base-package="spr.board.dao"
+		annotation-config="true" />
+
+	<mybatis:scan base-package="mybatis" />
+
 	<bean id="loginUrl" class="spr.board.utils.LoginUrlAssembler">
 		<property name="loginUrlTemplate" value="{$ctxpath}/login?target={$nextUrl}"></property>
 	</bean>
-	
-	<aop:aspectj-autoproxy/>
-	<context:annotation-config/>
-	
+
+	<aop:aspectj-autoproxy />
+	<context:annotation-config />
+
 	<bean id="testLogger" class="spr.board.utils.TestLogger" />
-	<!-- <bean id="logingAspect" class="spr.board.utils.LogingAspect" /> -->	
-	
-	
-	
+	<!-- <bean id="logingAspect" class="spr.board.utils.LogingAspect" /> -->
+
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+
+	<!-- <context:component-scan base-package="com.raise.web" > 
+		<context:include-filter type="regex" expression="com.raise.web.geoinfosystem..*Dao.*" /> 
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+		<context:exclude-filter type="assignable" expression="com.raise.web.homepage.TestDao" /> 
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" /> 
+		</context:component-scan> 
+		
+		include는 말그대로 포함시키는 것이고 exclude는 빼는 것입니다. regex는 
+		정규식으로 체크 annotation은 해당 어노테이션으로 확인합니다. assignable은 해당 클래스 타입을 넣어주시면 됩니다. 
+		끝으로 4번째 방법으로 aspectj라고 클래스 이름이 AspectJ의 표현식에 매칭되는지의 여부가 있긴 하지만 뭐 잘 안쓰니.. 
+		패스~ JUnit으로 DAO단만 테스트하고 싶은데 웹단의 Controller때문에 이 Controller 클래스들이 
+		ApplicationContextAware을 상속받아서 ApplicationContext가 꼬일 수 있는데 이럴 때 사용하시면 좋을듯 합니다. -->
+
 </beans>

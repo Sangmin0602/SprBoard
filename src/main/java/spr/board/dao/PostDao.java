@@ -164,7 +164,8 @@ public class PostDao implements IPostDao {
 		params.put("content", article.getContent());
 		params.put("ip", article.getIp());
 		
-		session.insert("Posting.WritePro",params);
+		//session.insert("Posting.WritePro",params);
+		session.insert("Posting.WritePro",article);
 		session.close();
 	}
 
