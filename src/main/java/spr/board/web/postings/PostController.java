@@ -11,20 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-
-
-
-
-
-
-
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,9 +26,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import spr.board.model.BoardDataBean;
+import spr.board.model.Member;
+import spr.board.model.PhoneDTO;
+import spr.board.model.PhoneVO;
 import spr.board.model.PostVO;
 import spr.board.model.UserVO;
 import spr.board.utils.ImageUtils;
+import spr.board.utils.MailServiceImpl;
 import spr.board.utils.ThumbnailUtil;
 
 @Controller
@@ -43,6 +40,9 @@ public class PostController {
 	private Logger logger = LoggerFactory.getLogger(PostController.class);
 	@Autowired
 	private PostService service;
+	
+	@Autowired
+	private MailServiceImpl mailService;
 
 	@RequestMapping(value="/postings", method=RequestMethod.GET)
 	public String listAll(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -300,4 +300,33 @@ public class PostController {
 		request.setAttribute("fileName", "이름_재지정.txt");   //다운 받을 시 이름을 결정합니다. 빼게되면 기존에 저장된 이름으로 받습니다.  
 		return new ModelAndView("fileDownloadView","fileDownload", file);
 	}
+	
+	@RequestMapping(value = "postings/sendMail", method = RequestMethod.GET)
+	public String sendMail(HttpServletRequest request){
+		
+		Member member = new Member();
+		member.setEmail("sangmin0602@gmail.com");
+		member.setId("sangmin0602@gmail.com");
+		member.setName("sangmin0602@gmail.com");
+		mailService.sendMail(member);
+		
+		return "home";
+	}
+	
+//    @RequestMapping(value = "/postings/write", method = RequestMethod.POST)
+//    public String wirteSubmit(PhoneDTO phoneDTO) {
+//        return "writeSubmit";
+//    }
+
+    @RequestMapping(value = "/postings/write", method = RequestMethod.POST)
+    public String wirteSubmit(@ModelAttribute("p") PhoneDTO phoneDTO) {
+        return "writeSubmit";
+    }
+    
+    @RequestMapping(value = "/postings/writeList", method = RequestMethod.POST)
+    public String wirteListSubmit(PhoneVO phoneVO, Model model) {
+    	List<PhoneDTO> list = phoneVO.getPhoneItems();
+    	model.addAttribute("article", list);
+        return "writeListSubmit";
+    }
 }

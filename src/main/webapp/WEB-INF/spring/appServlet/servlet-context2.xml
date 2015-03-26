@@ -46,4 +46,6 @@
 	 
 	 <context:component-scan base-package="spr.board.util" />
 	 
+	 
+	 
 </beans:beans>
