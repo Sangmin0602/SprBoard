@@ -4,6 +4,31 @@
 
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="static/js/jquery-1.11.0.min.js"></script>
+	<script>
+		function postXml() {
+			alert('aaaa');
+			var xmlBody = 
+				'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+				'<message-list>'+
+				'<message><id>1</id><message>메시지</message><creationTime>2014-03-16T13:22:16.767+09:00</creationTime></message><message><id>2</id><message>메시지2</message><creationTime>2014-03-16T13:22:16.767+09:00</creationTime></message>'+
+				'</message-list>';
+			$.ajax({
+				type: "post",
+				url: "postings/post.xml",
+				contentType: "text/xml",
+				data: xmlBody,
+				processData: false,
+				success: function( response ){
+					alert('bbb');
+					alert(response);
+				},
+				error: function(){
+					alert( "ERROR", arguments );
+				}
+			});
+		}
+	</script>
 <P>The time on the server is ${serverTime}.</P>
 
 <form enctype="multipart/form-data"
@@ -39,5 +64,14 @@ upload file name : ${targetFileInfo}
 	<hr>
 	<input type="submit" value="작성"><input type="reset" value="취소">
 </form>
+
+<li>HttpMessageConverter:
+	<ul>
+	<li><a href="mc/simple">/mc/simple</a>: 요청몸체-&gt;String / String-&gt;응답몸체, SimpleConverterController</li>
+	<li><a href="postings/list.xml">/postings/list.xml</a>: 자바객체-&gt;XML응답, GuestMessageController.listXml()</li>
+	<li><a href="javascript:postXml()">/postings/post.xml</a>: XML요청-&gt;자바객체, GuestMessageController.postXml()</li>
+	<li><a href="postings/list.json">/postings/list.json</a>: 자바객체-&gt;JSON응답, GuestMessageController.listJson()</li>
+	</ul>
+</li>
 </body>
 </html>

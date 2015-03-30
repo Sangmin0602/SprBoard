@@ -9,7 +9,6 @@
 		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop.xsd">
-
 	<!-- Root Context: defines shared resources visible to all other web components -->
 
 	<!-- <bean id="userDao" class="spr.board.dao.UserDao"></bean> <bean id="postDao" 

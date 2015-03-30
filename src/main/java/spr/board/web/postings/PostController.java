@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +21,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import spr.board.model.BoardDataBean;
+import spr.board.model.ConvertToXmlTest;
+import spr.board.model.ConvertToXmlTestList;
+import spr.board.model.ConvertToXmlTestList2;
 import spr.board.model.Member;
 import spr.board.model.PhoneDTO;
 import spr.board.model.PhoneVO;
@@ -329,4 +336,44 @@ public class PostController {
     	model.addAttribute("article", list);
         return "writeListSubmit";
     }
+    
+    @RequestMapping(value = "/postings/list.xml")
+    @ResponseBody
+    public ConvertToXmlTestList listXml() {
+    	return getMessageList();
+    }
+
+	@RequestMapping(value = "/postings/post.xml", method = RequestMethod.POST)
+	@ResponseBody
+	public ConvertToXmlTestList postXml(@RequestBody ConvertToXmlTestList messageList) {
+		logger.debug(messageList.toString());
+		List<ConvertToXmlTest> list = messageList.getMessages();
+		return messageList;
+	}
+	
+	
+	
+	private ConvertToXmlTestList getMessageList() {
+		List<ConvertToXmlTest> messages = Arrays.asList(
+				new ConvertToXmlTest(1,"aaa",new Date()),
+				new ConvertToXmlTest(1,"bbbb",new Date())
+				);
+		return new ConvertToXmlTestList(messages);
+	}
+	
+	
+	@RequestMapping(value = "/postings/list.json")
+	@ResponseBody
+	public ConvertToXmlTestList2 listJson() {
+		return getMessageList2();
+	}
+
+	private ConvertToXmlTestList2 getMessageList2() {
+		List<ConvertToXmlTest> messages = Arrays.asList(
+				new ConvertToXmlTest(1,"aaa",new Date()),
+				new ConvertToXmlTest(1,"aaa",new Date())
+				);
+
+		return new ConvertToXmlTestList2(messages);
+	}
 }
