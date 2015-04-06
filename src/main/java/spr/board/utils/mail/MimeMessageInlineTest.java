@@ -1,4 +1,4 @@
-package spr.board.utils;
+package spr.board.utils.mail;
 
 import javax.activation.FileDataSource;
 import javax.mail.internet.InternetAddress;

@@ -1,4 +1,4 @@
-package spr.board.utils;
+package spr.board.utils.mail;
 
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;

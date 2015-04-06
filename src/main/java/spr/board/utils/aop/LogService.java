@@ -1,4 +1,4 @@
-package spr.board.utils;
+package spr.board.utils.aop;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

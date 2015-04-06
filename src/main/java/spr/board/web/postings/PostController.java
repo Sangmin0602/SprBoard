@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,9 +39,10 @@ import spr.board.model.PhoneDTO;
 import spr.board.model.PhoneVO;
 import spr.board.model.PostVO;
 import spr.board.model.UserVO;
-import spr.board.utils.ImageUtils;
-import spr.board.utils.MailServiceImpl;
-import spr.board.utils.ThumbnailUtil;
+import spr.board.utils.download.ImageUtils;
+import spr.board.utils.download.ThumbnailUtil;
+import spr.board.utils.excel.PageRank;
+import spr.board.utils.mail.MailServiceImpl;
 
 @Controller
 public class PostController {
@@ -267,7 +269,11 @@ public class PostController {
 
 		response.sendRedirect("list");
 	}
-
+	/**
+	 * fileUpload 처리
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/home/fileUpload", method = RequestMethod.POST)
 	public String fileUpload( @RequestParam("file1") MultipartFile multipartFile, Model model ) throws IOException {
 
@@ -298,7 +304,11 @@ public class PostController {
 		return "home";
 
 	}
-
+	/**
+	 * DownLoad 처리
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "postings/download", method = RequestMethod.GET)
 	public ModelAndView down(HttpServletRequest request,@RequestParam(value="filepath", required=true) String filepath){
 		//File file = new File("C:/Users/PT/","11.txt");
@@ -307,7 +317,11 @@ public class PostController {
 		request.setAttribute("fileName", "이름_재지정.txt");   //다운 받을 시 이름을 결정합니다. 빼게되면 기존에 저장된 이름으로 받습니다.  
 		return new ModelAndView("fileDownloadView","fileDownload", file);
 	}
-	
+	/**
+	 * Mailing
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "postings/sendMail", method = RequestMethod.GET)
 	public String sendMail(HttpServletRequest request){
 		
@@ -324,12 +338,22 @@ public class PostController {
 //    public String wirteSubmit(PhoneDTO phoneDTO) {
 //        return "writeSubmit";
 //    }
-
+    /**
+     * EL태그처리 P 태그처리
+     * @param phoneVO
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/postings/write", method = RequestMethod.POST)
     public String wirteSubmit(@ModelAttribute("p") PhoneDTO phoneDTO) {
         return "writeSubmit";
     }
-    
+    /**
+     * EL태그처리
+     * @param phoneVO
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/postings/writeList", method = RequestMethod.POST)
     public String wirteListSubmit(PhoneVO phoneVO, Model model) {
     	List<PhoneDTO> list = phoneVO.getPhoneItems();
@@ -337,12 +361,19 @@ public class PostController {
         return "writeListSubmit";
     }
     
+	/**
+	 * ConvertToXmlTest home.jsp참조
+	 * @return
+	 */
     @RequestMapping(value = "/postings/list.xml")
     @ResponseBody
     public ConvertToXmlTestList listXml() {
     	return getMessageList();
     }
-
+	/**
+	 * ConvertToXmlTest home.jsp참조
+	 * @return
+	 */
 	@RequestMapping(value = "/postings/post.xml", method = RequestMethod.POST)
 	@ResponseBody
 	public ConvertToXmlTestList postXml(@RequestBody ConvertToXmlTestList messageList) {
@@ -351,8 +382,10 @@ public class PostController {
 		return messageList;
 	}
 	
-	
-	
+	/**
+	 * ConvertToXmlTest home.jsp참조
+	 * @return
+	 */
 	private ConvertToXmlTestList getMessageList() {
 		List<ConvertToXmlTest> messages = Arrays.asList(
 				new ConvertToXmlTest(1,"aaa",new Date()),
@@ -361,7 +394,10 @@ public class PostController {
 		return new ConvertToXmlTestList(messages);
 	}
 	
-	
+	/**
+	 * ConvertToXmlTest home.jsp참조
+	 * @return
+	 */
 	@RequestMapping(value = "/postings/list.json")
 	@ResponseBody
 	public ConvertToXmlTestList2 listJson() {
@@ -376,4 +412,70 @@ public class PostController {
 
 		return new ConvertToXmlTestList2(messages);
 	}
+	/**
+	 * 엑셀 다운로드 
+	 * Guide
+	 * http://poi.apache.org/spreadsheet/quick-guide.html#NewWorkbook
+	 * @param model
+	 * @return
+	 */
+	
+	@RequestMapping("/postings/pagestat/rank")
+	public String pageRank(Model model) {
+		List<PageRank> pageRanks = Arrays.asList(
+				new PageRank(1, "/board/humor/1011"),
+				new PageRank(2, "/board/notice/12"),
+				new PageRank(3, "/board/phone/190")
+				);
+		model.addAttribute("pageRankList", pageRanks);
+		return "pageRank";
+	}
+	/**
+	 * PDF 다운로드
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/postings/pagestat/rankreport")
+	public String pageRankReport(Model model) {
+		List<PageRank> pageRanks = Arrays.asList(
+				new PageRank(1, "/board/humor/1011"),
+				new PageRank(2, "/board/notice/12"),
+				new PageRank(3, "/board/phone/190")
+				);
+		model.addAttribute("pageRankList", pageRanks);
+		return "pageReport";
+	}
+
+	/**
+	 * Validator 테스트
+	 
+	@RequestMapping("/member/regist") 
+	public String regist(@ModelAttribute("memberInfo") MemberRegistRequest memReqReq,
+							BindingResult bindingResult) {
+		//Validator() 호출
+		new MemberRegistValidator().validate(memReqReq, bindingResult);
+		if(bindingResult.hasErrors()) {
+			return "";
+		}
+		//memberService.registNewMember(memRegReq);
+		return "member/registered";
+	}
+	*/
+	
+	/**
+	 * REST API 테스트 (웹서비스) : 이기종 통신시 WSDL(XML)로 처리
+	 * URI로 처리 확장자가 없음
+	 * GET,POST,DELETE, PUT
+	 */
+	
+	/**
+	 * 웹소켓 
+	 * 
+	 */
+	
+	/**
+	 * 
+	 * 트랜잭션 처리
+	 * 
+	 */
 }

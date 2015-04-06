@@ -45,11 +45,11 @@
 
 	<aop:aspectj-autoproxy />
 	<context:annotation-config />
+<!--
+	<bean id="testLogger" class="spr.board.utils.aop.TestLogger" />
+	 <bean id="logingAspect" class="spr.board.utils.LogingAspect" />
 
-	<bean id="testLogger" class="spr.board.utils.TestLogger" />
-	<!-- <bean id="logingAspect" class="spr.board.utils.LogingAspect" /> -->
-
-
+ -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
@@ -78,6 +78,15 @@
 	            <prop key="mail.smtp.starttls.enable">true</prop>
 	        </props>
 	    </property>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>message.error</value>
+			</list>
+		</property>
 	</bean>
 
 </beans>

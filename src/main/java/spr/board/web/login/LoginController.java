@@ -1,27 +1,36 @@
 package spr.board.web.login;
 
+
 import java.io.UnsupportedEncodingException;
+import java.net.Authenticator;
 import java.net.URLDecoder;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import spr.board.dao.IDaoRepository;
+import spr.board.model.LoginCommand;
 import spr.board.model.UserVO;
 
 @Controller
 public class LoginController {
 	private Logger logger = LoggerFactory.getLogger(LoginController.class);
-	
+	private static final String LOGIN_FORM = "auth/loginForm";
+	private java.net.Authenticator authenticator;
 	@Autowired
 	private IDaoRepository repository;
 	
@@ -85,6 +94,40 @@ public class LoginController {
 		logger.debug("NEXT URL : [" + url + "]");
 		return url;
 	}
-	
+	/**
+	 * Validator 테스트
+	 * 
+	 */
+
+//	@RequestMapping(method = RequestMethod.GET)
+//	public String loginForm(LoginCommand loginCommand) {
+//		return LOGIN_FORM;
+//	}
+//
+//	@RequestMapping(method = RequestMethod.POST)
+//	public String login(@Valid LoginCommand loginCommand, Errors errors,
+//			HttpServletRequest request) {
+//		if (errors.hasErrors()) {
+//			return LOGIN_FORM;
+//		}
+//		try {
+//			Auth auth = authenticator.authenticate(loginCommand.getEmail(), loginCommand.getPassword());
+//			HttpSession session = request.getSession();
+//			session.setAttribute("auth", auth);
+//			return "redirect:/index.jsp";
+//		} catch (AuthenticationException ex) {
+//			errors.reject("invalidIdOrPassword");
+//			return LOGIN_FORM;
+//		}
+//	}
+//
+//	@InitBinder
+//	protected void initBinder(WebDataBinder binder) {
+//		binder.setValidator(new LoginCommandValidator());
+//	}
+//
+//	public void setAuthenticator(Authenticator authenticator) {
+//		this.authenticator = authenticator;
+//	}
 	
 }

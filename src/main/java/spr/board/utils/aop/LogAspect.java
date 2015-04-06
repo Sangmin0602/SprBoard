@@ -1,4 +1,4 @@
-package spr.board.utils;
+package spr.board.utils.aop;
 
 import java.lang.reflect.Method;
 

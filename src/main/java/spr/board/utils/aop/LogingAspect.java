@@ -1,4 +1,4 @@
-package spr.board.web;
+package spr.board.utils.aop;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +15,13 @@ import spr.board.model.UserVO;
 public class LogingAspect {
 	private Logger logger = LoggerFactory.getLogger(LogingAspect.class);
 	
+	/**
+	 * 같은 클래스에 위치한 @Pointcut 메서드느'메서드이름'만 입력
+	 * 같은 패키지에 위치한 @Pointcut 메서드는 '클래스단순이름.메서드이름' 을 입력
+	 * 다른 패키지에 위치한 @Pointcut 메서드는 '완전한 클래스이름.메서드이름'을 입력
+	 * 
+	 * 
+	 */
 	@Pointcut("execution(* spr.board.web.postings.PostController.showWritingPage(..))")
 	private void adminMethod() {}
 	
@@ -64,6 +71,13 @@ public class LogingAspect {
     	} catch(Exception e) {
     		throw new RuntimeException("먼저 로그인을 하셔야 합니다.");
     	}
+    	/**
+    	 * Around Advice를 사용할경우
+    	 * ProceedingJoinPoint를 전달받고있다.ProceedingJoinPoint의 proceed()메서드를 호출하면 프록시대상 객체의
+    	 * 실제 메서드를 호출하게 된다. 따라서 ProceedingJoinPoint.Proceed()메서드를 호출하기 전과 후에 알맞은 공통
+    	 * 기능을 구현하면된다.
+    	 * 
+    	 */
     	Object result = joinPoint.proceed();
     	System.out.println("#### LoginAspect 끝 ####"); 
     	return result;

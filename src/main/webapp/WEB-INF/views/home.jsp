@@ -73,5 +73,18 @@ upload file name : ${targetFileInfo}
 	<li><a href="postings/list.json">/postings/list.json</a>: 자바객체-&gt;JSON응답, GuestMessageController.listJson()</li>
 	</ul>
 </li>
+
+
+<li>ExcelDownload:
+	<ul>
+	<li><a href="postings/pagestat/rank">/pagestat/rank</a>:ExcelDownload</li>
+	</ul>
+</li>
+
+<li>PDFDownload:
+	<ul>
+	<li><a href="postings/pagestat/rankreport">/pagestat/rank</a>:PDFDownload</li>
+	</ul>
+</li>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package spr.board.utils;
+package spr.board.utils.download;
 
 
 import java.awt.Graphics2D;
