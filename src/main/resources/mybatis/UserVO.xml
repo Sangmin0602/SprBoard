@@ -81,4 +81,21 @@
 		INSERT INTO users (userid, nickname, email, `password`) 
 		VALUES (#{userId}, #{nickName}, #{email}, #{password})
 	</insert>
+	
+	<select id="getTotalUsers" resultType="Integer">
+		select Count(*) from users
+	</select>
+	
+	<select id="findByRange" parameterType="HashMap" resultMap="fullUserMap"> 
+			SELECT
+			seq, 
+			userid, 
+			nickname, 
+			email, 
+			password, 
+			when_joined
+		FROM users
+		LIMIT #{offset}, #{rpp}
+	</select>
+	
 </mapper>

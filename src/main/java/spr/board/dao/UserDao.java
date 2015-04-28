@@ -133,4 +133,29 @@ public class UserDao implements IUserDao {
 	public IUserDao getDao() {
 		return this;
 	}
+	
+	@Override
+	public int getTotalUsers() {
+		UserVO user = null;
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			return  session.selectOne("getTotalUsers");
+		} finally{
+			session.close();
+		}
+	}
+	@Override
+	public List<UserVO> findByRange(int offset, int rpp) {
+		UserVO user = null;
+		Map map = new HashMap();
+		map.put("offset", offset);
+		map.put("rpp", rpp);
+		
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			return session.selectList("User.findByRange",map);
+		} finally {
+			session.close();
+		}
+	}
 }

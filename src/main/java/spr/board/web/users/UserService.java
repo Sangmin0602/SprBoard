@@ -32,5 +32,13 @@ public class UserService {
 	public void insertUser(UserVO newUser) {
 		repo.getUserDao().insert(newUser);
 	}
+
+	public int getTotalUsers() {
+		return repo.getUserDao().getTotalUsers();
+	}
+
+	public List<UserVO> findByRange(int offset, int rpp) {
+		return repo.getUserDao().findByRange(offset, rpp);
+	}
 	
 }

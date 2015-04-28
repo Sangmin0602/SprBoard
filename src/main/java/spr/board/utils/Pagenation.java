@@ -22,6 +22,7 @@ public class Pagenation {
 	 * @return
 	 */
 	public int getTotalPage() {
+		// 12 : 4 => 4 4 4 
 		return totalRows / rowsPerPage + ( totalRows % rowsPerPage > 0 ? 1 :0);
 	}
 	

@@ -36,4 +36,6 @@ public interface IUserDao extends IDao<IUserDao> {
 	
 	public UserVO findUser(String usernm, String pw);
 	public boolean existsUserId(String userId);
+	public int getTotalUsers();
+	public List<UserVO> findByRange(int offset, int rpp);
 }

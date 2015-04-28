@@ -20,7 +20,7 @@
 	<span><a href="${ctxPath }/postings/${pos.seq}">${pos.title }</a></span>
 </c:forEach>
 <div><input id="showSelected" type="button" value="선택된 row" onclick="getSelectedRows()"/></div>
-<table id="postingTable"></table>
+<table id="userTable"></table>
 <div id="pager"></div>
 
 <script type="text/javascript">
@@ -29,13 +29,13 @@ function asTitleLink(cellValue, options, rowData, action) {
 	return link;
 }
 function getSelectedRows() {
-    var grid = $("#postingTable");
+    var grid = $("#userTable");
     var rowKey = grid.getGridParam("selrow");
 
     if (!rowKey)
         alert("No rows are selected");
     else {
-    	console.log( $("#postingTable").getRowData(rowKey));
+    	console.log( $("#userTable").getRowData(rowKey));
         var selectedIDs = grid.getGridParam("selarrrow");
         var result = "";
         for (var i = 0; i < selectedIDs.length; i++) {
@@ -54,27 +54,29 @@ function getSelectedRows() {
  * 원하는 페이지 번호 - page : 1
  */
 $(document).ready(function () {
-	var grid = $("#postingTable").jqGrid({
+	var grid = $("#userTable").jqGrid({
         mtype: "",
         datatype: "json",
         colModel: [
         	{ label: 'SEQ', name: 'seq', key: true, width: 75, sortable:false },
-			{ label: 'TITLE', 
-        		name: 'title', 
+			{ label: 'UserId', 
+        		name: 'userId', 
         		width: 250, 
         		sortable:false, 
         		formatter: asTitleLink },
-			{ label: 'WRITER', name: 'writer', width: 150 },
-			{ label: 'DATE', name: 'when_created', width: 150 }
+			{ label: 'NickName', name: 'nickname', width: 150 },
+			{ label: 'Eamil', name: 'email', width: 150 },
+			{ label: 'Password', name: 'password', width: 150 },
+			{ label: 'WhenJoined', name: 'whenjoined', width: 150 }
 		],
 		total : "total",
 		page : "page",
 		records : "records",
-		caption: "Postings",
+		caption: "Users",
 		viewrecords: true,
         width: 600,
         height: 250,
-        rowNum: 3,
+        rowNum: 4,
         /*rownumbers: true,
         rownumWidth: 30,*/
         multiselect : true,
@@ -90,7 +92,7 @@ $(document).ready(function () {
     	}
 	});
 	
-	grid.setGridParam({url: '${ctxPath}/postings.json', mtype:'GET'})
+	grid.setGridParam({url: '${ctxPath}/users.json', mtype:'GET'})
 		.trigger('reloadGrid');
 	
 });
