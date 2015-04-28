@@ -20,4 +20,12 @@ public class BoardUtils {
 		return path ;
 	}
 
+	public static int convertToInt(String numForm, int defaultValue) {
+		try {
+			return Integer.parseInt(numForm);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
 }

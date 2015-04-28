@@ -24,6 +24,12 @@ public class PostService {
 		List<PostVO> allPosts = repo.getPostDao().findAll();
 		return allPosts;
 	}
+	
+	public List<PostVO> findByRange(int startOffset, int pageSize) {
+		List<PostVO> lists = repo.getPostDao().findByRange(startOffset, pageSize);
+		
+		return lists;
+	}
 
 	public PostVO findBySeq(String postSeq) {
 		int seq = Integer.parseInt(postSeq);
@@ -76,5 +82,9 @@ public class PostService {
 	public int deleteArticle(int num, String passwd) throws SQLException {
 		int check = repo.getPostDao().deleteArticle(num, passwd);
 		return 0;
+	}
+
+	public int countAllPostings() {
+		return repo.getPostDao().countAllPostings();
 	}
 }

@@ -82,6 +82,29 @@ public class PostDao implements IPostDao {
 		}
 	}
 	
+	@Override
+	public List<PostVO> findByRange(int startOffset, int pageSize) {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			HashMap<String, Integer> range = new HashMap<String, Integer>();
+			range.put("start", startOffset);
+			range.put("size", pageSize);
+			return session.selectList("Posting.findByRange", range);
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
+	public int countAllPostings() {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			return session.selectOne("Posting.countAllPostings");
+		} finally {
+			session.close();
+		}
+	}
+	
 	void updateViewCount(SqlSession session, int seq, int viewCount) throws SQLException {
 		Map<String, Integer> params = new HashMap<String, Integer>();
 		params.put("postingId", seq);

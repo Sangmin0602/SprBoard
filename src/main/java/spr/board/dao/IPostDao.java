@@ -41,5 +41,9 @@ public interface IPostDao extends IDao<IPostDao> {
 	public void updateArticle(BoardDataBean article) throws SQLException;
 
 	public int deleteArticle(int num, String passwd) throws SQLException;
+
+	public List<PostVO> findByRange(int startOffset, int pageSize);
+
+	public int countAllPostings();
 	
 }

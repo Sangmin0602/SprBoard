@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,8 @@ import spr.board.model.PhoneDTO;
 import spr.board.model.PhoneVO;
 import spr.board.model.PostVO;
 import spr.board.model.UserVO;
+import spr.board.utils.BoardUtils;
+import spr.board.utils.Pagenation;
 import spr.board.utils.download.ImageUtils;
 import spr.board.utils.download.ThumbnailUtil;
 import spr.board.utils.excel.PageRank;
@@ -61,6 +64,48 @@ public class PostController {
 		model.addAttribute("allPosts", posts);
 
 		return "list-postings" ;
+	}
+	
+	@RequestMapping(value="/postings2", method=RequestMethod.GET)
+	public String listByJqGrid(HttpServletRequest request, HttpServletResponse response) {
+		return "list-by-jqgrid" ;
+	}
+	
+	
+	@RequestMapping(value="/postings.json", 
+			method=RequestMethod.GET, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String listPosts(HttpServletRequest request, HttpServletResponse response) throws Throwable{
+		// _search=false&nd=1430198053012&rows=20&page=1&sidx=&sord=asc
+		String paramRows = request.getParameter("rows");
+		String paramPageNum = request.getParameter("page");
+		int rows = BoardUtils.convertToInt(paramRows, 10);
+		int curPage = BoardUtils.convertToInt(paramPageNum, 1); 
+		int totalRows = service.countAllPostings();
+		
+		Pagenation pgn = new Pagenation(curPage-1, rows, totalRows);
+		List<PostVO> posts = service.findByRange(pgn.getOffset(), pgn.getRPP());
+		
+		JSONObject json = new JSONObject();
+		
+		json.put("page", curPage);
+		json.put("total", 
+				pgn.getTotalPage());
+		json.put("records", totalRows);
+		JSONArray arr = new JSONArray();
+		
+		for(int i = 0 ; i < posts.size() ; i++) {
+			PostVO aPost = posts.get(i);
+			JSONObject tmp = new JSONObject();
+			tmp.put("seq", aPost.getSeq());
+			tmp.put("title", aPost.getTitle());
+			tmp.put("writer", aPost.getWriter().getNickName());
+			tmp.put("when_created", aPost.getWhenCreated());
+			arr.add(tmp);
+		}	
+		json.put("rows", arr);
+		return  json.toJSONString();
 	}
 
 	@RequestMapping(value="/postings/{pid:[0-9]+}", method=RequestMethod.GET)

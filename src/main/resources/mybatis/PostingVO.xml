@@ -45,6 +45,22 @@
 		FROM postings
 	</select>
 	
+	<select id="findByRange" parameterType="hashmap" resultMap="fullPostingMap">
+		SELECT 
+			seq, 
+			title, 
+			content, 
+			views, 
+			when_created, 
+			fk_writer 
+		FROM postings
+		ORDER BY when_created DESC
+		LIMIT #{start}, #{size}
+	</select>
+	
+	<select id="countAllPostings" resultType="integer">
+		SELECT count(seq) from postings
+	</select>
 	<!-- pk(seq)값으로 찾음 -->
 	<select id="findBySeq" parameterType="int" resultMap="fullPostingMap">
 		SELECT 
