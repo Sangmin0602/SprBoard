@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +35,13 @@ import spr.board.model.BoardDataBean;
 import spr.board.model.ConvertToXmlTest;
 import spr.board.model.ConvertToXmlTestList;
 import spr.board.model.ConvertToXmlTestList2;
+import spr.board.model.JQueryJson;
 import spr.board.model.Member;
 import spr.board.model.PhoneDTO;
 import spr.board.model.PhoneVO;
 import spr.board.model.PostVO;
 import spr.board.model.UserVO;
+import spr.board.model.jQueryJsonList;
 import spr.board.utils.download.ImageUtils;
 import spr.board.utils.download.ThumbnailUtil;
 import spr.board.utils.excel.PageRank;
@@ -59,7 +62,6 @@ public class PostController {
 		List<PostVO> posts = service.findAllPosts();
 
 		model.addAttribute("allPosts", posts);
-
 		return "list-postings" ;
 	}
 
@@ -445,7 +447,113 @@ public class PostController {
 		model.addAttribute("pageRankList", pageRanks);
 		return "pageReport";
 	}
+	/*
+	 * Jquery 테스트
+	 */
+	@RequestMapping("/postings/jQueryTest")
+	public String JqueryTest(Model model) {
+		return"jQueryTest";
+	}
+	/*
+	 * Jquery 테스트
+	 */
+	@RequestMapping("/postings/jQueryTest2")
+	public String JqueryTest2(Model model) {
+		return"jQueryTest2";
+	}
+	/*
+	 * Jquery 테스트
+	 */
+	@RequestMapping("/postings/jQueryTest3")
+	public String JqueryTest3(Model model) {
+		return"jQueryTest3";
+	}
+	
+	/*
+	 * Jquery 테스트
+	 */
+	@RequestMapping("/postings/jQueryTest4")
+	public String JqueryTest4(Model model) {
+		return"jQueryTest4";
+	}
+	
+	/*
+	 * Jquery 테스트(AJAX 테스트)
+	 */
+	@RequestMapping("/postings/listhtml")
+	public String listhtml(Model model) {
+		return"listhtml";
+	}
+	/*
+	 * Jquery 테스트(AJAX 테스트)
+	 */
+	@RequestMapping("/postings/listhtml2")
+	public String listhtml2(Model model) {
+		return"listhtml2";
+	}
 
+	/*
+	 * Jquery 테스트(AJAX 테스트)
+	 */
+	@RequestMapping("/postings/listhtml3")
+	public String listhtml3(Model model) {
+		return"listhtml3";
+	}
+
+	/*
+	 * Jquery 테스트(AJAX 테스트)
+	 */
+	@RequestMapping("/postings/jQueryUI")
+	public String jQueryUI(Model model) {
+		return"JQueryUI";
+	}
+
+	/*
+	 * Jquery 테스트(AJAX 테스트)
+	 */
+	@RequestMapping(value="/postings/search", method = RequestMethod.GET)
+	public String search(Model model) {
+		return"search";
+	}
+
+	/*
+	 * Jquery 테스트(AJAX 테스트)
+	 */
+	@RequestMapping(value="/postings/jQueryTest5")
+	public String jQueryTest5(Model model) {
+		return"jQueryTest5";
+	}
+	@RequestMapping(value="/postings/jQueryJson", method =RequestMethod.POST)
+	@ResponseBody
+	public jQueryJsonList jQueryJson(Model model) {
+		return jQueryConvertToJson();
+	}
+
+	private jQueryJsonList jQueryConvertToJson() {
+		List<JQueryJson> list = Arrays.asList(
+				new JQueryJson(1,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(2,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(3,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(4,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(5,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(6,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(7,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(8,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(9,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(10,new Date(),"Client",200,10,210,"note"),
+				new JQueryJson(11,new Date(),"Client",200,10,210,"note")
+				);
+
+		return new jQueryJsonList(list);
+	}
+	/*
+	 * JqGrid 테스트
+	 * 
+	 * /
+	@RequestMapping(value="/postings/jqGrid")
+	public String jqGrid(Model model) {
+		return"jqGrid";
+	}
 	/**
 	 * Validator 테스트
 	 
