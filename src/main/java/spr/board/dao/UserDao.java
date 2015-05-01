@@ -99,9 +99,22 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public void delete(UserVO user) throws DaoException {
+	public void delete(Integer userSeq) throws DaoException {
 		// TODO 구현 안되었음
-
+		SqlSession session = sqlSessionFactory.openSession(false);
+		
+		try {
+			int delCount = session.delete("User.deleteUser", userSeq);
+			if ( delCount != 1) {
+				throw new SQLException("delete count가 1이 아님 : " + delCount);
+			}
+			session.commit();
+		} catch ( SQLException e) {
+			session.rollback();
+			throw new DaoException(e.getMessage(), e);
+		} finally {
+			session.close();
+		}
 	}
 
 	/**

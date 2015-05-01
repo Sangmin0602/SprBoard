@@ -95,7 +95,11 @@
 			password, 
 			when_joined
 		FROM users
+		ORDER BY when_joined DESC
 		LIMIT #{offset}, #{rpp}
 	</select>
 	
+	<delete id="deleteUser" parameterType="integer" flushCache="true">
+		DELETE FROM users WHERE seq = #{id}
+	</delete>
 </mapper>

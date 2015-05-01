@@ -32,7 +32,7 @@ public interface IUserDao extends IDao<IUserDao> {
 	
 	public void update(UserVO user) throws DaoException;
 	
-	public void delete(UserVO user) throws DaoException;
+	public void delete(Integer userSeq) throws DaoException;
 	
 	public UserVO findUser(String usernm, String pw);
 	public boolean existsUserId(String userId);

@@ -28,4 +28,14 @@ public class BoardUtils {
 		}
 	}
 
+	/**
+	 * 문자타입 numForm을 숫자타입으로 변환.
+	 * 변경할 수 없는 경우(숫자형태가 아님. "" 또는 null등) 예외 던짐.
+	 * @param numForm
+	 * @return
+	 */
+	public static int convertToInt(String numForm) {
+		return Integer.parseInt(numForm);
+	}
+
 }

@@ -1,5 +1,6 @@
 package spr.board.web.users;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -79,6 +81,66 @@ public class UserController {
 		json.put("rows", arr);
 		
 		return json.toJSONString();
+	}
+	
+	@RequestMapping(value="/users/edit/{fieldName}", 
+			method=RequestMethod.POST, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String updateUser(HttpServletRequest req, 
+			HttpServletResponse res, 
+			@PathVariable String fieldName) throws Throwable {
+		
+		JSONObject json = new JSONObject();
+		if ( "password".equals(fieldName)) {
+			int userId = BoardUtils.convertToInt(req.getParameter("id"));
+			String password = req.getParameter("password");
+			
+			json.put("success", Boolean.TRUE);
+			json.put("message", "");
+		}
+		
+		return json.toJSONString();
+	}
+	
+	@RequestMapping(value="/users/del", 
+			method=RequestMethod.POST, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String deleteUser(HttpServletRequest req) {
+		/* oper:del
+		 * id:5005
+		 */
+		int userSeq = BoardUtils.convertToInt(req.getParameter("id"));
+		boolean success = service.deleteUser ( userSeq );
+		JSONObject json = new JSONObject();
+		json.put("success", success);
+		return json.toJSONString();
+	}
+	
+	@RequestMapping(value="/users/new", 
+			method=RequestMethod.POST, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String addUser(HttpServletRequest req) {
+		/*
+		 * userId:ds
+		 * nickname:sds
+		 * email:sd
+		 * password:sd
+		 * oper:add
+		 * id:_empty
+		 */
+		HashMap<String, String> formData = new HashMap<String, String>();
+		formData.put("userId", req.getParameter("userId"));
+		formData.put("nickname", req.getParameter("nickname"));
+		formData.put("email", req.getParameter("email"));
+		formData.put("password", req.getParameter("password"));
+		
+		UserVO newUser = service.addNewUser(formData);
+		JSONObject root = new JSONObject();
+		
+		return "";
 	}
 	
 //	public void setDaoRepository(IDaoRepository repo) {
