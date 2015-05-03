@@ -102,6 +102,7 @@ public class PostController {
 			tmp.put("title", aPost.getTitle());
 			tmp.put("writer", aPost.getWriter().getNickName());
 			tmp.put("when_created", aPost.getWhenCreated());
+			tmp.put("deleted", aPost.isDeleted());
 			arr.add(tmp);
 		}	
 		json.put("rows", arr);

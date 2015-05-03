@@ -24,6 +24,8 @@
 <div id="pager"></div>
 
 <script type="text/javascript">
+var ctxpath = ctxpath || '${ctxPath}';
+
 function asTitleLink(cellValue, options, rowData, action) {
 	var link = '<a href=/web/postings/' + rowData.seq + '>' + cellValue + '</a>' ;
 	return link;
@@ -54,6 +56,23 @@ function getSelectedRows() {
  * 원하는 페이지 번호 - page : 1
  */
 $(document).ready(function () {
+	/*
+	 * datepicker가 아닌 datetimepicker를 사용하려면
+	 * 별도의 플러그인을 추가해야함.
+	 * http://stackoverflow.com/questions/20487077/how-to-write-time-picker-field-in-jqgrid
+	 */
+	
+	var fnInitDateEdit = function (elem) {
+        $(elem).datepicker({
+            dateFormat: "yy-mm-dd",
+            autoSize: true,
+            changeYear: true,
+            changeMonth: true,
+            showButtonPanel: true,
+            showWeek: true
+        });
+    };
+    
 	var grid = $("#postingTable").jqGrid({
         mtype: "",
         datatype: "json",
@@ -63,9 +82,25 @@ $(document).ready(function () {
         		name: 'title', 
         		width: 250, 
         		sortable:false, 
+        		editable:true,
         		formatter: asTitleLink },
-			{ label: 'WRITER', name: 'writer', width: 150 },
-			{ label: 'DATE', name: 'when_created', width: 150 }
+			{ label: 'WRITER', name: 'writer', width: 150, editable:true },
+			{ label: 'DATE', 
+				name: 'when_created', 
+				width: 150,
+				editable:true,
+				editoptions: {dataInit : fnInitDateEdit},
+				editrules: { date: true}
+			},
+			{ label: 'DELETED', 
+				name: 'deleted', 
+				width:150, 
+				formatter: 'checkbox',
+				editable: true,
+				align: 'center',
+				edittype:'checkbox',
+				editoptions: {value:'YES:NO'}
+			}
 		],
 		total : "total",
 		page : "page",
@@ -84,11 +119,26 @@ $(document).ready(function () {
         /*,
         scroll: 1,
         emptyrecords: 'Scroll to bottom to retrieve new page'*/
-        
+	
         onSelectRow : function ( rowid, status, e ) {
     		console.log("selected row : " + rowid, "status : " + status);
     	}
 	});
+	
+	grid.navGrid('#pager',
+        	{
+        		edit : true,
+        		add : true,
+        		del : true,
+        		search : true,
+        		refresh: true,
+        		position: 'left',
+        		cloneToTop: true
+        	},
+        	{ url : ctxpath + '/postings/edit'},
+        	{ url : ctxpath + '/postings/new'},
+        	{ url : ctxpath + '/postings/del'}
+        );
 	
 	grid.setGridParam({url: '${ctxPath}/postings.json', mtype:'GET'})
 		.trigger('reloadGrid');

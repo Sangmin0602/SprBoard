@@ -7,17 +7,19 @@ public class PostVO {
 	private Integer viewCount;
 	private String whenCreated;
 	private UserVO writer;
+	private Boolean deleted ;
 
 	public PostVO(Integer seq, String title, String content, Integer viewCount,
-			String whenCreated) {
+			String whenCreated, Boolean deleted) {
 		this.seq = seq;
 		this.title = title;
 		this.content = content;
 		this.viewCount = viewCount;
 		this.whenCreated = whenCreated;
+		this.deleted = deleted;
 	}
 	public PostVO(Integer seq, String title, String content, Integer viewCount,
-			String whenCreated, UserVO writer) {
+			String whenCreated, UserVO writer, Boolean deleted) {
 		super();
 		this.seq = seq;
 		this.title = title;
@@ -25,12 +27,14 @@ public class PostVO {
 		this.viewCount = viewCount;
 		this.whenCreated = whenCreated;
 		this.writer = writer;
+		this.deleted = deleted;
 	}
 	public PostVO(String title, String content, UserVO writer) {
 		this.title = title;
 		this.content = content;
 		this.viewCount = 0;
 		this.writer = writer;
+		this.deleted = false;
 	}
 	
 	public Integer getSeq() {
@@ -68,6 +72,13 @@ public class PostVO {
 	}
 	public void setWriter(UserVO writer) {
 		this.writer = writer;
+	}
+	
+	public Boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	@Override
 	public int hashCode() {

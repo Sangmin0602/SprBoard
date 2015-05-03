@@ -24,12 +24,14 @@
 			String title, 
 			String content, 
 			Integer viewCount,
-			String whenCreated -->
+			String whenCreated
+			boolean deleted -->
 			<idArg javaType="integer" column="seq"/>
 			<arg javaType="string" column="title"/>
 			<arg javaType="string" column="content"/>
 			<arg javaType="integer" column="views"/>
 			<arg javaType="string" column="when_created"/>
+			<arg javaType="boolean" column="deleted"/>
 		</constructor>
 		<association property="writer" column="fk_writer" select="User.userBySeq"/>
 	</resultMap>
@@ -40,7 +42,8 @@
 			title, 
 			content, 
 			views, 
-			when_created, 
+			when_created,
+			deleted, 
 			fk_writer 
 		FROM postings
 	</select>
@@ -51,7 +54,8 @@
 			title, 
 			content, 
 			views, 
-			when_created, 
+			when_created,
+			deleted, 
 			fk_writer 
 		FROM postings
 		ORDER BY when_created DESC
@@ -69,6 +73,7 @@
 			content,
 			views,
 			when_created,
+			deleted,
 			fk_writer 
 		FROM postings WHERE seq = #{id}
 	</select>
