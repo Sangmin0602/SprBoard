@@ -19,13 +19,16 @@
 	<span>[${pos.writer.nickName}]</span>
 	<span><a href="${ctxPath }/postings/${pos.seq}">${pos.title }</a></span>
 </c:forEach>
-<div><input id="showSelected" type="button" value="선택된 row" onclick="getSelectedRows()"/></div>
+<div>
+	<input id="showSelected" type="button" value="선택된 row" onclick="getSelectedRows()"/>
+	<input id="btnDelCheck" type="button" value="삭제 예약" onclick="checkAsDeleted()"/>
+</div>
 <table id="postingTable"></table>
 <div id="pager"></div>
 
 <script type="text/javascript">
 var ctxpath = ctxpath || '${ctxPath}';
-
+var grid ;
 function asTitleLink(cellValue, options, rowData, action) {
 	var link = '<a href=/web/postings/' + rowData.seq + '>' + cellValue + '</a>' ;
 	return link;
@@ -34,7 +37,6 @@ function stripTitleLink(cellValue, options, rowData) {
 	return cellValue;
 }
 function getSelectedRows() {
-    var grid = $("#postingTable");
     var rowKey = grid.getGridParam("selrow");
 
     if (!rowKey)
@@ -48,9 +50,16 @@ function getSelectedRows() {
         }
 
         alert(result);
-    }                
+    }
+    
 }
-
+function checkAsDeleted() {
+	var rows = grid.getGridParam('selarrrow');
+	alert ( rows );
+	$.post(ctxpath + '/postings/deleteLater', {seqs:rows}, function(json){
+		grid.trigger ( 'reloadGrid');
+	});
+}
 /*
  * 전체 포스팅 : 11개
  *
@@ -76,7 +85,7 @@ $(document).ready(function () {
         });
     };
     
-	var grid = $("#postingTable").jqGrid({
+	grid = $("#postingTable").jqGrid({
         mtype: "",
         datatype: "json",
         colModel: [

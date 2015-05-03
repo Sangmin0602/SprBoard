@@ -87,4 +87,8 @@ public class PostService {
 	public int countAllPostings() {
 		return repo.getPostDao().countAllPostings();
 	}
+
+	public void checkAsDeletion(String[] seqs) {
+		repo.getPostDao().checkAsDeleted ( seqs );
+	}
 }

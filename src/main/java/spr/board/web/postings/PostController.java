@@ -196,6 +196,17 @@ public class PostController {
 
 		return "list";//해당 뷰
 	}
+	
+	@RequestMapping(value="/postings/deleteLater", 
+			method=RequestMethod.POST, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String checkAsDel(HttpServletRequest request) {
+		String [] paramIds = request.getParameterValues("seqs[]");
+		
+		service.checkAsDeletion(paramIds);
+		return paramIds[0];
+	}
 
 	@RequestMapping(value="/postings/writeForm", method=RequestMethod.GET)
 	public String writeForm(HttpServletRequest request, HttpServletResponse response) throws Throwable {

@@ -257,4 +257,18 @@ public class PostDao implements IPostDao {
 		return chk;
 	}
 
+
+	/**
+	 * 주어진 글들을 삭제 예약 처리함.
+	 */
+	@Override
+	public void checkAsDeleted(String[] seqs) {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		
+		int updateCnt = session.delete("Posting.checkAsDeleted", seqs);
+		
+		session.close();
+		
+	}
+
 }

@@ -145,4 +145,13 @@
 		delete from board2 where num = #{num}
 	</delete>
 	
+	<delete id="checkAsDeleted">
+		UPDATE postings
+		SET deleted = 'Y'
+		WHERE seq IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach> 
+	</delete>
+	
 </mapper>
