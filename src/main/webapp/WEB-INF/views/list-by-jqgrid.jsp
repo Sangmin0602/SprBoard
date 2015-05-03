@@ -30,6 +30,9 @@ function asTitleLink(cellValue, options, rowData, action) {
 	var link = '<a href=/web/postings/' + rowData.seq + '>' + cellValue + '</a>' ;
 	return link;
 }
+function stripTitleLink(cellValue, options, rowData) {
+	return cellValue;
+}
 function getSelectedRows() {
     var grid = $("#postingTable");
     var rowKey = grid.getGridParam("selrow");
@@ -83,7 +86,9 @@ $(document).ready(function () {
         		width: 250, 
         		sortable:false, 
         		editable:true,
-        		formatter: asTitleLink },
+        		formatter: asTitleLink,
+        		unformat: stripTitleLink
+        	},
 			{ label: 'WRITER', name: 'writer', width: 150, editable:true },
 			{ label: 'DATE', 
 				name: 'when_created', 
@@ -109,7 +114,7 @@ $(document).ready(function () {
 		viewrecords: true,
         width: 600,
         height: 250,
-        rowNum: 3,
+        rowNum: 5,
         /*rownumbers: true,
         rownumWidth: 30,*/
         multiselect : true,
