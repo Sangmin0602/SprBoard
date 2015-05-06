@@ -1,6 +1,5 @@
-package spr.board.web;
+package spr.board.web.decoratorPattern;
 
-import spr.board.web.decoratorPattern.Beverage;
 
 public class DarkRoast extends Beverage {
 	

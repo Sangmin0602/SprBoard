@@ -1,6 +1,5 @@
 package spr.board.web.decoratorPattern;
 
-import spr.board.web.DarkRoast;
 
 public class StarbuzzCoffee {
 	public static void main(String[] args) {
