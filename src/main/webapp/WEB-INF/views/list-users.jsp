@@ -24,8 +24,9 @@
 <div id="pager"></div>
 
 <script type="text/javascript">
+var ctxpath = ctxpath || '${ctxPath}';
 function asTitleLink(cellValue, options, rowData, action) {
-	var link = '<a href=/web/postings/' + rowData.seq + '>' + cellValue + '</a>' ;
+	var link = '<a href=${ctxPath}/postings/' + rowData.seq + '>' + cellValue + '</a>' ;
 	return link;
 }
 function getSelectedRows() {
@@ -57,16 +58,17 @@ $(document).ready(function () {
 	var grid = $("#userTable").jqGrid({
         mtype: "",
         datatype: "json",
+        editurl : ctxpath + '/users/new',
         colModel: [
         	{ label: 'SEQ', name: 'seq', key: true, width: 75, sortable:false },
 			{ label: 'UserId', 
         		name: 'userId', 
         		width: 250, 
-        		sortable:false, 
-        		formatter: asTitleLink },
-			{ label: 'NickName', name: 'nickname', width: 150 },
-			{ label: 'Eamil', name: 'email', width: 150 },
-			{ label: 'Password', name: 'password', width: 150 },
+        		sortable:false,
+        		editable : true, edittype: 'text' },
+			{ label: 'NickName', name: 'nickname', width: 150, editable : true, edittype: 'text' },
+			{ label: 'Eamil', name: 'email', width: 150, editable : true, edittype: 'text' },
+			{ label: 'Password', name: 'password', width: 150, editable :true, edittype: 'text' },
 			{ label: 'WhenJoined', name: 'whenjoined', width: 150 }
 		],
 		total : "total",
@@ -92,6 +94,32 @@ $(document).ready(function () {
     	}
 	});
 	
+	grid.navGrid('#pager', 
+		// button settings
+	{
+		edit : true,
+		add : true,
+		del : true,
+		search : true,
+		refresh : true,
+		view : true,
+		position : "left",
+		cloneToTop : true
+	},
+	// option - edit
+	{
+		url : ctxpath + '/users/edit'
+	},
+	// option - add
+	{
+		url : ctxpath +'/users/new'
+	},
+	// option - del
+	{
+		url : ctxpath + '/users/del'
+	}
+			 	
+	);
 	grid.setGridParam({url: '${ctxPath}/users.json', mtype:'GET'})
 		.trigger('reloadGrid');
 	

@@ -19,15 +19,26 @@
 	<span>[${pos.writer.nickName}]</span>
 	<span><a href="${ctxPath }/postings/${pos.seq}">${pos.title }</a></span>
 </c:forEach>
-<div><input id="showSelected" type="button" value="선택된 row" onclick="getSelectedRows()"/></div>
+<div>
+	<input id="showSelected" type="button" value="선택된 row" onclick="getSelectedRows()"/>
+	<input id="btnCheckDel" type="button" value="삭제표시" onclick="sendCheckAsDel()"/>
+	<input id="btnDelNow" type="button" value="지금 삭제" onclick="sendDelNow()"/>
+</div>
 <table id="postingTable"></table>
 <div id="pager"></div>
 
 <script type="text/javascript">
+var ctxpath = ctxpath || '${ctxPath}';
+var grid;
 function asTitleLink(cellValue, options, rowData, action) {
 	var link = '<a href=/web/postings/' + rowData.seq + '>' + cellValue + '</a>' ;
 	return link;
 }
+
+function stripTitleLink ( cellValue, options, domElem ) {
+	return cellValue ;
+}
+
 function getSelectedRows() {
     var grid = $("#postingTable");
     var rowKey = grid.getGridParam("selrow");
@@ -45,7 +56,39 @@ function getSelectedRows() {
         alert(result);
     }                
 }
-
+/**
+ * 선택된 row들을 삭제 표시하는 요청을 전송함.
+ */
+function sendCheckAsDel() {
+	// 1. jqGrid 인스턴스에서 선택된 row 들을 읽어들임.
+	var rows = grid.jqGrid('getGridParam', 'selarrrow');
+	alert ( rows );
+	
+	// 2. row들을 query string에 첨부
+	var url = ctxpath + '/postings/deleteLater';
+	$.post ( url, {seqs: rows }, 
+		function( json ){
+		// 3. 요청을 보내고 서버쪽에서 보내주는 응답을 처리함.
+		grid.trigger ( 'reloadGrid');
+	});
+	
+}
+/**
+ * 선택된 글들을 db에서 삭제하는 요청 보냄. 
+ */
+function sendDelNow() {
+	// 1. jqGrid 인스턴스에서 선택된 row 들을 읽어들임.
+	var rows = grid.jqGrid('getGridParam', 'selarrrow');
+	alert ( rows );
+	
+	// 2. row들을 query string에 첨부
+	var url = ctxpath + '/postings/deleteNow';
+	$.post ( url, {seqs: rows }, 
+		function( json ){
+		// 3. 요청을 보내고 서버쪽에서 보내주는 응답을 처리함.
+		grid.trigger ( 'reloadGrid');
+	});
+}
 /*
  * 전체 포스팅 : 11개
  *
@@ -54,7 +97,7 @@ function getSelectedRows() {
  * 원하는 페이지 번호 - page : 1
  */
 $(document).ready(function () {
-	var grid = $("#postingTable").jqGrid({
+	grid = $("#postingTable").jqGrid({
         mtype: "",
         datatype: "json",
         colModel: [
@@ -62,10 +105,18 @@ $(document).ready(function () {
 			{ label: 'TITLE', 
         		name: 'title', 
         		width: 250, 
-        		sortable:false, 
-        		formatter: asTitleLink },
-			{ label: 'WRITER', name: 'writer', width: 150 },
-			{ label: 'DATE', name: 'when_created', width: 150 }
+        		sortable:false,
+        		editable : true,
+        		formatter: asTitleLink, 
+        		unformat: stripTitleLink },
+			{ label: 'WRITER', name: 'writer', width: 150, editable : true },
+			{ label: 'DATE', name: 'when_created', width: 150, editable : true },
+			{ label: 'DELETED', name: 'deleted', width: 150, 
+				formatter : 'checkbox',
+				edittype: 'checkbox',
+				align : 'center',
+				editoptions: {value:'YES:NO'},
+				editable : true}
 		],
 		total : "total",
 		page : "page",
@@ -84,11 +135,26 @@ $(document).ready(function () {
         /*,
         scroll: 1,
         emptyrecords: 'Scroll to bottom to retrieve new page'*/
-        
+                
         onSelectRow : function ( rowid, status, e ) {
     		console.log("selected row : " + rowid, "status : " + status);
     	}
 	});
+	
+	grid.navGrid('#pager',
+        	{
+        		edit : true,
+        		add : true,
+        		del : true,
+        		search : true,
+        		refresh: true,
+        		position: 'left',
+        		cloneToTop: true
+        	},
+        	{ url : ctxpath + '/postings/edit'},
+        	{ url : ctxpath + '/postings/new'},
+        	{ url : ctxpath + '/postings/del'}
+       );
 	
 	grid.setGridParam({url: '${ctxPath}/postings.json', mtype:'GET'})
 		.trigger('reloadGrid');
