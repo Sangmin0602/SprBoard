@@ -101,6 +101,7 @@ public class PostController {
 			tmp.put("seq", aPost.getSeq());
 			tmp.put("title", aPost.getTitle());
 			tmp.put("writer", aPost.getWriter().getNickName());
+			tmp.put("deleted", aPost.isDeleted());
 			tmp.put("when_created", aPost.getWhenCreated());
 			arr.add(tmp);
 		}	
@@ -114,6 +115,18 @@ public class PostController {
 		PostVO post = service.findBySeq ( pid );
 		model.addAttribute("post", post);
 		return "view-post";
+	}
+	@RequestMapping(value="/postings/deleteLater", method=RequestMethod.POST)
+	@ResponseBody
+	public String deletedLater(HttpServletRequest request, HttpServletResponse response) {
+		String [] seqs = request.getParameterValues("seqs[]");
+		service.checkAsDelete(seqs);
+//		JSONObject json
+		/**/
+		/* Jackson library - 꼭 쓸 필요는 없다(응답이 복잡하면 쓸 수 있음) 
+		 *  { 'success' : true }
+		 */
+		return "{ \"success\" : true }";
 	}
 
 	@RequestMapping(value="/postings/write", method=RequestMethod.GET)
@@ -490,7 +503,30 @@ public class PostController {
 		model.addAttribute("pageRankList", pageRanks);
 		return "pageReport";
 	}
-
+	@RequestMapping("/postings/jsTest")
+	public String jsTest(Model model) {
+		return "jsTest";
+	}
+	
+	@RequestMapping("/postings/jsTest2")
+	public String jsTest2(Model model) {
+		return "jsTest2";
+	}
+	
+	@RequestMapping("/postings/jsTest3")
+	public String jsTest3(Model model) {
+		return "jsTest3";
+	}
+	
+	@RequestMapping("/postings/jsTest4")
+	public String jsTest4(Model model) {
+		return "jsTest4";
+	}
+	
+	@RequestMapping("/postings/jsTest5")
+	public String jsTest5(Model model) {
+		return "jsTest5";
+	}
 	/**
 	 * Validator 테스트
 	 

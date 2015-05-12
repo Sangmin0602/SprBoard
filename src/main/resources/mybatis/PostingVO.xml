@@ -24,11 +24,13 @@
 			String title, 
 			String content, 
 			Integer viewCount,
+			Boolean deleted,
 			String whenCreated -->
 			<idArg javaType="integer" column="seq"/>
 			<arg javaType="string" column="title"/>
 			<arg javaType="string" column="content"/>
 			<arg javaType="integer" column="views"/>
+			<arg javaType="boolean" column="deleted"/>
 			<arg javaType="string" column="when_created"/>
 		</constructor>
 		<association property="writer" column="fk_writer" select="User.userBySeq"/>
@@ -41,6 +43,7 @@
 			content, 
 			views, 
 			when_created, 
+			deleted,
 			fk_writer 
 		FROM postings
 	</select>
@@ -51,6 +54,7 @@
 			title, 
 			content, 
 			views, 
+			deleted,
 			when_created, 
 			fk_writer 
 		FROM postings
@@ -68,6 +72,7 @@
 			title,
 			content,
 			views,
+			deleted,
 			when_created,
 			fk_writer 
 		FROM postings WHERE seq = #{id}
@@ -139,5 +144,14 @@
 	<delete id="deleteArticle" parameterType="int">
 		delete from board2 where num = #{num}
 	</delete>
+	
+	<update id="CheckAsDelete">
+		update postings set deleted = 'Y'
+		where seq IN   
+		<foreach collection="array" open="(" separator="," close=")" item="v">
+			#{v}
+		</foreach>
+	
+	</update>
 	
 </mapper>

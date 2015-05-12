@@ -94,14 +94,41 @@ public class UserDao implements IUserDao {
 
 	@Override
 	public void update(UserVO user) throws DaoException {
-		// TODO 구현 안되었음
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try{
+			int udpateCnt = session.update("User.updateUser", user);
+			if(udpateCnt != 1) {
+				throw new SQLException("update count가 1이 아님 : " + udpateCnt);
+			}
+			session.commit();
+		} catch(SQLException e){
+			session.rollback();
+			throw new DaoException(e.getMessage(), e);
+		} finally {
+			session.close();
+		}
 
 	}
 
 	@Override
 	public void delete(UserVO user) throws DaoException {
-		// TODO 구현 안되었음
-
+		// "moms", "맘이", "mom@naver.com", "mmmm"
+				SqlSession session = sqlSessionFactory.openSession(false);
+				
+				try {
+					int delCount = session.insert("User.deleteUser", user.getSeq());
+					if ( delCount != 1) {
+						throw new SQLException("insert count가 1이 아님 : " + delCount);
+					}
+					session.commit();
+					//return findBySeq(session, newUser.getSeq());
+				} catch ( SQLException e) {
+					session.rollback();
+					throw new DaoException(e.getMessage(), e);
+				} finally {
+					session.close();
+				}
+		
 	}
 
 	/**

@@ -87,4 +87,13 @@ public class PostService {
 	public int countAllPostings() {
 		return repo.getPostDao().countAllPostings();
 	}
+
+	/**
+	 * 주어진 게시물들을 삭제 표시함.
+	 * @param seqs
+	 */
+	public void checkAsDelete(String[] seqs) {
+		repo.getPostDao().CheckAsDelete(seqs);
+		
+	}
 }

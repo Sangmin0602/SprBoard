@@ -28,4 +28,8 @@ public class BoardUtils {
 		}
 	}
 
+	public static int convertToInt(String numForm) {
+		return Integer.parseInt(numForm);
+	}
+
 }

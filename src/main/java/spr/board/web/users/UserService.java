@@ -40,5 +40,23 @@ public class UserService {
 	public List<UserVO> findByRange(int offset, int rpp) {
 		return repo.getUserDao().findByRange(offset, rpp);
 	}
+
+	public UserVO addUser(String userId, String nick, String email,
+			String password) {
+		UserVO user = new UserVO(userId, nick, email, password);
+		return repo.getUserDao().insert(user);
+		
+	}
+
+	public void deleteUser(int id) {
+		UserVO user = new UserVO();
+		user.setSeq(id);
+		repo.getUserDao().delete(user);
+	}
+
+	public UserVO updateUser(UserVO user) {
+			repo.getUserDao().update(user);
+		return user;
+	}
 	
 }

@@ -45,5 +45,7 @@ public interface IPostDao extends IDao<IPostDao> {
 	public List<PostVO> findByRange(int startOffset, int pageSize);
 
 	public int countAllPostings();
+
+	public void CheckAsDelete(String[] seqs);
 	
 }

@@ -257,4 +257,22 @@ public class PostDao implements IPostDao {
 		return chk;
 	}
 
+
+	@Override
+	public void CheckAsDelete(String[] seqs) throws DaoException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			int cnt = session.delete("Posting.CheckAsDelete", seqs);
+			if(cnt != seqs.length) {
+				throw new DaoException("fail to update all seqs");
+			}
+			session.commit();
+		} catch ( DaoException e) {
+			session.rollback();
+			throw e;
+		} finally {			
+			session.close();
+		}
+	}
+
 }

@@ -6,10 +6,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
+
 	function checkText() {
 		var str
 		
 		//Form의 이름이 myForm이기 때문에 document.myform으로 지정
+		//elements[0]은 첫번째 input 창의 value
 		if(document.myform.elements[0].value != "") {
 			str = "이름은" +  document.myform.elements[0].value+"입니다.\n";
 			str += "데이터를 보냈습니다";
@@ -22,6 +24,8 @@
 		}
 	}
 	
+	//Submit()전에 호출되는 메소드
+	//onsubmit= "return beforeSubmit()"
 	function beforeSubmit() {
 		//Yes 버튼을 누르면 true가 리턴 될 것이다.
 		return confirm("데이터를 정말로 보낼까요?");
@@ -52,8 +56,11 @@
 <body>
 	<h2>Form 객체</h2> <br>
 	<form name="myform" action="nothing" onsubmit= "return beforeSubmit()">
+	
 		이름 : <input type = "text" maxLength = "10">
 		<input type = "button" value = "입력 확인 후 보내기" onclick="checkText()">
+		
+		<br>
 		<br>
 		
 		<input type = "submit" id ="submit" value = "submitQuery" size = "300" disabled = "true">

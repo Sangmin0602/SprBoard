@@ -12,10 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import spr.board.dao.DaoException;
 import spr.board.dao.IDaoRepository;
 import spr.board.model.UserVO;
 import spr.board.utils.BoardUtils;
@@ -81,6 +83,80 @@ public class UserController {
 		return json.toJSONString();
 	}
 	
+	@RequestMapping(value="/users/new", 
+			method=RequestMethod.POST, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String insertUser ( HttpServletRequest req ) {
+		/*
+		 * userId=xxx   -> setUserId ( req.getParamet("userId") );
+		 * nickname=xxx 
+		 * email=xx%40naver.com 
+		 * password=23233232
+		 * oper=add | edit | del
+		 * id=_empty
+		 */
+		String userId = req.getParameter("userId");
+		String nick = req.getParameter("nickname");
+		String email = req.getParameter("email");
+		String password = req.getParameter("password");
+		UserVO user = service.addUser( userId, nick, email, password);
+		
+		JSONObject json = new JSONObject();
+		json.put("success", Boolean.TRUE);
+		return json.toJSONString();
+	}
+	
+	@RequestMapping(value="/users/del", 
+			method=RequestMethod.POST, 
+			produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String deleteUser(HttpServletRequest req) {
+		int id = BoardUtils.convertToInt(req.getParameter("id"));
+		JSONObject json = new JSONObject();
+		try {
+			service.deleteUser(id);
+			json.put("success", Boolean.TRUE);
+		} catch(DaoException e) {
+			json.put("success", Boolean.FALSE);
+			json.put("cause", "e6000");
+		}
+		return json.toJSONString();
+	}
+	@RequestMapping(value="users/edit",
+				method = RequestMethod.POST,
+				produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String updateUser(HttpServletRequest req) {
+		int seq = BoardUtils.convertToInt(req.getParameter("id"));
+		JSONObject json = new JSONObject();
+		UserVO user = service.findBySeq(seq);
+		if ( user == null ) {
+			json.put("success", Boolean.FALSE);
+			json.put("cause", "e7000");
+			return json.toJSONString();
+		}
+		
+		String userId = req.getParameter("userId");
+		String nick = req.getParameter("nickname");
+		String email = req.getParameter("email");
+		String password = req.getParameter("password");
+		
+		user.setUserId(userId);
+		user.setNickName(nick);
+		user.setEmail(email);
+		user.setPassword(password);
+		
+		try {
+			UserVO userCheck = service.updateUser(user);
+			json.put("success", Boolean.TRUE);
+		} catch ( DaoException e) {
+			json.put("success", Boolean.FALSE);
+			json.put("cause", "e7001");
+		}
+		
+		return json.toJSONString();
+	}
 //	public void setDaoRepository(IDaoRepository repo) {
 //		this.repository = repo;
 //	}

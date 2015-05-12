@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
+
+	//input ID의 텍스트창에 focus 와 select(문자 블럭)를 표시한다.
 	function verifyValue(form) {
 		var ans = form.input.value;
 		
@@ -23,11 +25,13 @@
 		}
 	}
 	
+	//getElementById로 id를 찾아  div에 문자열을 표시해준다.
 	function showStatus(str) {
 		var c = document.getElementById("comment");
 		c.innerHTML=str;
 	}
 	
+	//숫자체크
 	function CheckNumber(form) {
 		var n = form.txt.value;
 		if(isNaN(n))
@@ -45,18 +49,23 @@
 		답 : <input type ="text" name = "input" size = "3" maxlength = "3">
 		<input type = "button" value="Verify" onclick="verifyValue(this.form)">
 	</form>
+	
 	<br>
 	<br>
+	
 	<form name = "myform2">
 		이름 : <input type = "text" onfocus = "showStatus('이름을 입력하시오')"><br>
 		나이 : <input type = "text" onblur = "showStatus('나이을 입력하시오')"><br>
 		주소 : <input type = "text" onselect "showStatus('나이을 입력하시오')"><br>
 		<div id = "comment"></div>
 	</form>
+	
 	<br>
 	<br>
+	
 	<form name = "myform3">
 		숫자입력 : <input type = "text" id = "txt" onchange = "CheckNumber(this.form)">
 	</form>
+	
 </body>
 </html>
