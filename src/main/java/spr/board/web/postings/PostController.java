@@ -73,7 +73,7 @@ public class PostController {
 	
 	
 	@RequestMapping(value="/postings.json", 
-			method=RequestMethod.GET, 
+			method={RequestMethod.GET, RequestMethod.POST}, 
 			produces="application/json; charset=utf-8")
 	@ResponseBody
 	public String listPosts(HttpServletRequest request, HttpServletResponse response) throws Throwable{
