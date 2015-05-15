@@ -11,6 +11,9 @@ public class DaoRepository implements IDaoRepository {
 	
 	@Autowired
 	private IPostDao postDao;
+	
+	@Autowired
+	private IAddressDao addrDao;
 
 //	public DaoRepository(IUserDao userDao, IPostDao postDao) {
 //		this.userDao = userDao;
@@ -24,6 +27,11 @@ public class DaoRepository implements IDaoRepository {
 	@Override
 	public IPostDao getPostDao() {
 		return postDao;
+	}
+
+	@Override
+	public IAddressDao getAddressDao() {
+		return addrDao;
 	}
 
 }

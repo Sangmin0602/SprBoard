@@ -7,4 +7,6 @@ public interface IDaoRepository {
 
 	public IPostDao getPostDao();
 //	public void setPostDao(IPostDao dao);
+	
+	public IAddressDao getAddressDao();
 }

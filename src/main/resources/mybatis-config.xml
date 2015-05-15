@@ -6,6 +6,7 @@
 <configuration>
 	<properties resource="dbconn.properties"></properties>
 	<typeAliases>
+		<typeAlias type="spr.board.model.AddressVO" alias="Address"/>
 		<typeAlias type="spr.board.model.UserVO" alias="User"/>
 		<typeAlias type="spr.board.model.PostVO" alias="Posting"/>
 		<typeAlias type="spr.board.model.BoardDataBean" alias="BoardBean"/>
@@ -24,5 +25,6 @@
 	<mappers>
 		<mapper resource="mybatis/UserVO.xml" />
 		<mapper resource="mybatis/PostingVO.xml"/>
+		<mapper resource="mybatis/AddressVO.xml"/>
 	</mappers>
 </configuration>
