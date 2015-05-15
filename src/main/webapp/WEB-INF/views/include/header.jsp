@@ -4,4 +4,5 @@
 <c:set var="ctxPath" value="${pageContext.request.contextPath }"/>
 <a href="${ctxPath }">홈으로</a> | <c:if test="${empty user}"><a href="${ctxPath}/login">로그인</a></c:if>
 <c:if test="${not empty user}"><a href="${ctxPath}/logout">로그아웃</a></c:if>
-| <a href="${ctxPath }/postings/write">글쓰기</a> | <a href="${ctxPath }/postings">글보기</a> 
+| <a href="${ctxPath }/postings/write">글쓰기</a> | <a href="${ctxPath }/postings">글보기</a>
+| <c:if test="${empty user}"><a href="${ctxPath}/join">가입하기</a></c:if> 
