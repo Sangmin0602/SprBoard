@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Addr">
+	<resultMap type="Addr" id="fullAddrMap">
+		<constructor>
+			<idArg column="seq" javaType="Integer"/>
+			<arg column="zipcode" javaType="string" />
+			<arg column="main_addr" javaType="string"/>
+			<arg column="full_addr" javaType="string"/>
+		</constructor>
+	</resultMap>
+	
+	<select id="searchByUmd" parameterType="String" resultMap="fullAddrMap">
+	select 
+		seq,
+		zipcode,
+		CONCAT_WS( '@' ,si_do,si_gun_gu , um_myun_dong, ri, doseo, building_name ) AS main_addr, 
+		address AS full_addr
+		from zipcode zc
+	where zc.um_myun_dong LIKE #{umd}
+	</select>
+</mapper>

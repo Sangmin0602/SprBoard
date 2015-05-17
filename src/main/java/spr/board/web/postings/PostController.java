@@ -527,6 +527,10 @@ public class PostController {
 	public String jsTest5(Model model) {
 		return "jsTest5";
 	}
+	@RequestMapping("/postings/cssTest")
+	public String cssTest(Model model) {
+		return "cssTest";
+	}
 	/**
 	 * Validator 테스트
 	 

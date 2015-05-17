@@ -8,6 +8,7 @@
 	<typeAliases>
 		<typeAlias type="spr.board.model.UserVO" alias="User"/>
 		<typeAlias type="spr.board.model.PostVO" alias="Posting"/>
+		<typeAlias type="spr.board.model.AddressVO" alias="Addr"/>
 		<typeAlias type="spr.board.model.BoardDataBean" alias="BoardBean"/>
 	</typeAliases>
 	<environments default="dev">
@@ -24,5 +25,6 @@
 	<mappers>
 		<mapper resource="mybatis/UserVO.xml" />
 		<mapper resource="mybatis/PostingVO.xml"/>
+		<mapper resource="mybatis/AddrVO.xml"/>
 	</mappers>
 </configuration>

@@ -12,10 +12,9 @@ public class DaoRepository implements IDaoRepository {
 	@Autowired
 	private IPostDao postDao;
 
-//	public DaoRepository(IUserDao userDao, IPostDao postDao) {
-//		this.userDao = userDao;
-//		this.postDao = postDao;
-//	}
+	@Autowired
+	private IJoinDao joinDao;
+	
 	@Override
 	public IUserDao getUserDao() {
 		return userDao;
@@ -25,5 +24,11 @@ public class DaoRepository implements IDaoRepository {
 	public IPostDao getPostDao() {
 		return postDao;
 	}
+
+	@Override
+	public IJoinDao getJoinDao() {
+		return joinDao;
+	}
+	
 
 }
